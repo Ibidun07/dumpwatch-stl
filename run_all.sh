@@ -17,5 +17,6 @@ echo "7/9 Watch-list test";                  python pipeline/07_watchlist_test.p
 echo "8/9 Site profiles + map layers";       python pipeline/08_site_profiles.py $OUT $GEO
 echo "10 Enforcement outcomes and gaps";       python pipeline/10_enforcement.py $OUT
 echo "11 Cleanup speed test";                  python pipeline/11_cleanup_speed.py $OUT
+echo "12 Address lookup index";                python pipeline/12_address_index.py $OUT
 echo "9/9 Build HTML pages";                 python pipeline/09_build_pages.py web $OUT
 echo "Done. Open outputs/dumpwatch.html in a browser."

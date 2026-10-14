@@ -7,7 +7,7 @@ DumpWatch turns the City's open data into a ranked to-do list:
 
 - **Act here next:** the 40 blocks most likely to be dumped on in the coming year. Each one has an evidence file with its report history, repeat addresses, the weekdays dumping gets reported, nearby vacant and city-owned property, and a recommended action (camera, secure lots, board-up, alley lighting and signs).
 - **Watch list:** 25 blocks with no dumping reports for three years that are surrounded by the conditions that came before dumping elsewhere. Secure them before the first pile appears.
-- **Cases:** a witness-report form (vehicle, color, make, partial plate, marks, what was dumped, photo) that links sightings from different sites into one case file for investigators, with the reasons for each link and suggested next steps. Runs on clearly labeled sample reports; reports you add stay in your browser.
+- **Cases:** a witness-report form (street address or map spot, vehicle, color, make, partial plate, marks, what was dumped, photo) that links sightings from different sites into one case file for investigators, with the reasons for each link and suggested next steps. Runs on clearly labeled sample reports; reports you add stay in your browser.
 - **Enforcement record:** each site file shows how witnessed reports there ended (summons, arrest, warning, or closed for lack of evidence), and a map layer shows high-risk blocks with no enforcement since 2022.
 - **Does it work?:** the model was trained on data through 2025 and tested on January–October 2026 reports it never saw.
 
@@ -75,7 +75,8 @@ Then open `outputs/dumpwatch.html`.
 | 8 | `08_site_profiles.py` | Builds evidence files for the top 40 cells, the 25-block watch list, and simplified map layers. Writes `app_data.json`. |
 | 10 | `10_enforcement.py` | Groups the outcomes of witnessed reports (`PUBLICRESOLUTION`: summons, arrest, warning, not enough evidence), counts them per site and per year, and finds high-risk blocks with no summons or arrest. Writes `enforcement.json`. |
 | 11 | `11_cleanup_speed.py` | Tests whether fast closure of debris reports is followed by fewer repeat reports within 60 days, matching blocks by report type and prior-year activity. Writes `cleanup_speed.json`. |
-| 9 | `09_build_pages.py` | Merges steps 10–11 into the app data and injects it into the HTML templates in `web/` to produce the two self-contained pages. Runs last. |
+| 12 | `12_address_index.py` | Builds an offline address lookup from the 135,000 parcel addresses: the average location of each street hundred-block (10,395 blocks on 2,032 streets, 287 KB). The report form uses it to place a typed address such as "5909 Lillian Ave" without any outside geocoding service. Writes `address_index.json`. |
+| 9 | `09_build_pages.py` | Merges steps 10–12 into the app data and injects it into the HTML templates in `web/` to produce the two self-contained pages. Runs last. |
 
 `explore_problem_codes.py` is the exploration script used to find which 311 problem codes relate to dumping.
 

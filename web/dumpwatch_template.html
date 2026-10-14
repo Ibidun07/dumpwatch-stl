@@ -12,6 +12,7 @@
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121619;--panel:#1b2125;--ink:#e6e9e7;--muted:#9aa5ab;--rule:#2d353a;--sunk:#161b1e;--low:#2a3236;--t1:#c98a2f;--t2:#ea6a3b;--t3:#ffb08a;--watch:#6fb3d4;--road:#3a4449;--nb:#56626a;--accent:#ea6a3b;--good:#5fbf86;--c1:#a993f0;--c2:#5fd0b0;--c3:#e58cc5;--c4:#d8b45a;color-scheme:dark}}
 :root[data-theme="dark"]{--bg:#121619;--panel:#1b2125;--ink:#e6e9e7;--muted:#9aa5ab;--rule:#2d353a;--sunk:#161b1e;--low:#2a3236;--t1:#c98a2f;--t2:#ea6a3b;--t3:#ffb08a;--watch:#6fb3d4;--road:#3a4449;--nb:#56626a;--accent:#ea6a3b;--good:#5fbf86;--c1:#a993f0;--c2:#5fd0b0;--c3:#e58cc5;--c4:#d8b45a;color-scheme:dark}
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.45}
 .top{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:end;justify-content:space-between;padding-block:18px 14px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));border-bottom:1px solid var(--rule);background:var(--panel)}
 .brand{font:700 30px/1 var(--display);letter-spacing:.01em;margin:0}
@@ -98,11 +99,21 @@ svg text{font-family:var(--mono);font-size:10px;fill:var(--muted)}
 .err{color:var(--accent);font-size:13px;margin:0}
 .thumb{max-width:100%;max-height:160px;border:1px solid var(--rule)}
 .link{border:1px solid var(--rule);padding:8px 10px;font-size:13px}
+.seg{display:flex;border:1px solid var(--rule)}
+.seg label{position:relative;flex:1;text-align:center;font:500 13px var(--body);padding:7px 4px;cursor:pointer;border-right:1px solid var(--rule)}
+.seg label:last-child{border-right:0}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+.seg label:has(input:checked){background:var(--ink);color:var(--bg)}
+.seg label:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:-2px}
+.ok{color:var(--good)}
+.btn.report{background:var(--accent);border-color:var(--accent);color:#fff;font-size:14px;padding:11px 16px;align-self:center}
+@media (max-width:600px){.btn.report{width:100%}}
 </style>
 
 <header class="top">
  <div><h1 class="brand">DumpWatch STL<small>Illegal dumping risk, cases and enforcement queue · data through <span id="asof"></span></small></h1></div>
  <div class="kpis" id="kpis"></div>
+ <button class="btn report" id="hdr-report">+ Report a dumper</button>
 </header>
 
 <main class="grid">
@@ -196,6 +207,25 @@ const mode=a=>{const c={};a.filter(Boolean).forEach(x=>c[x]=(c[x]||0)+1);return 
 function describe(c,R){const rs=c.idx.map(i=>R[i]);const v=[mode(rs.map(r=>r.color)),mode(rs.map(r=>r.make)),mode(rs.map(r=>r.vtype))].filter(Boolean).join(' ');
  const marks=[...new Set(rs.flatMap(r=>r.marks||[]))];return {rs,v:v||'Unknown vehicle',marks}}
 
+/* ---------- address lookup (City parcel addresses, no outside service) ---------- */
+const AX=D.addr||{},AXK=Object.keys(AX);
+const STY=new Set(['ST','STREET','AVE','AV','AVENUE','BLVD','BOULEVARD','DR','DRIVE','PL','PLACE','RD','ROAD','LN','LANE','CT','COURT','WAY','SQ','SQUARE','PKY','PKWY','PARKWAY','TER','TERRACE','PLZ','PLAZA','CIR','CIRCLE','HWY']);
+const DIRW={N:'N',S:'S',E:'E',W:'W',NORTH:'N',SOUTH:'S',EAST:'E',WEST:'W'};
+const titleCase=x=>x.toLowerCase().replace(/\b\w/g,c=>c.toUpperCase());
+function geocode(raw){let s=String(raw||'').toUpperCase().split(',')[0].replace(/[^A-Z0-9 ]/g,' ').replace(/\s+/g,' ').trim();
+ s=s.replace(/\s+\d{5}(\s+\d{4})?$/,'').replace(/\s+(MO|MISSOURI)$/,'').replace(/\s+(SAINT|ST)\s+LOUIS$/,'').trim();
+ const m=s.match(/^(\d+)[A-Z]?\s+(.+)$/);if(!m)return null;const num=+m[1];let t=m[2].split(' '),dir='';
+ if(t.length>1&&DIRW[t[0]]){dir=DIRW[t[0]];t=t.slice(1)}
+ while(t.length>1&&STY.has(t.at(-1)))t=t.slice(0,-1);
+ let name=t.join(' ');if(name==='MLK'||name==='MARTIN LUTHER KING')name='DR MARTIN LUTHER KING';
+ let c=AXK.filter(k=>k.slice(k.indexOf('|')+1)===name);
+ if(!c.length&&name.length>=4)c=AXK.filter(k=>k.slice(k.indexOf('|')+1).includes(name));
+ if(dir){const c2=c.filter(k=>k.startsWith(dir+'|'));if(c2.length)c=c2}
+ const blk=Math.floor(num/100)*100;let best=null;
+ c.forEach(k=>AX[k].forEach(([b,la,lo])=>{const d=Math.abs(b-blk);if(!best||d<best.d)best={d,b,la,lo,k}}));
+ if(!best||best.d>300)return null;const dd=best.k.split('|')[0],nn=best.k.slice(best.k.indexOf('|')+1);
+ return {lat:best.la,lon:best.lo,label:`${best.b} block of ${dd?dd+' ':''}${titleCase(nn)}`,exact:best.d===0}}
+
 /* ---------- map ---------- */
 const cv=$('map'),ctx=cv.getContext('2d');
 const lats=[],lons=[];D.nb.forEach(n=>n.rings.forEach(r=>r.forEach(([x,y])=>{lons.push(x);lats.push(y)})));
@@ -247,7 +277,7 @@ cv.addEventListener('pointermove',e=>{const r=cv.getBoundingClientRect(),mx=e.cl
  else if(h.type==='w'){const w=D.watch[h.i];tip.textContent=`Watch: ${w.nb} · no reports in 3 yrs · ${w.p}% est. chance of first report`}
  else{const {R,caseOf}=buildCases(),x=R[h.i],c=caseOf[h.i];tip.textContent=`${x.sample?'Sample report · ':'Your report · '}${[x.color,x.vtype].filter(Boolean).join(' ')||'Vehicle not noted'} · ${when(x)}${c?` · Case ${c.id}`:''}`}});
 cv.addEventListener('pointerup',e=>{const r=cv.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;
- if(!moved){if(pick){pickLoc=unP(mx,my);setPick(false);const t=$('locText');if(t)t.textContent=`Spot on map: ${pickLoc.lat.toFixed(5)}, ${pickLoc.lon.toFixed(5)}`;const s=$('f-site');if(s)s.value='map';draw()}
+ if(!moved){if(pick){pickLoc=unP(mx,my);const t=$('locText');if(t)t.textContent=`Spot set: ${pickLoc.lat.toFixed(5)}, ${pickLoc.lon.toFixed(5)}. Click again to move it.`;draw()}
   else{const h=hit(mx,my);if(h){h.type==='s'?openSite(h.i):h.type==='w'?openWatch(h.i):openReport(h.i)}}}drag=null});
 cv.addEventListener('pointerleave',()=>$('tip').hidden=true);
 function hit(mx,my){let best=null,bd=1e9;hits.forEach(h=>{const d=Math.hypot(h.x-mx,h.y-my);if(d<h.r&&d<bd){bd=d;best=h}});return best}
@@ -349,7 +379,7 @@ function openReport(i){
  $('pane').innerHTML=`<div class="file"><button class="back" id="back">← All cases</button>
   <div><span class="pill ${r.sample?'S':'Y'}">${r.sample?'Sample report':'Your report'}</span><h2>${esc([r.color,r.vtype].filter(Boolean).join(' ')||'Vehicle not noted')}</h2><div class="meta">${esc(when(r))} · ${n.d<1?'at':'near'} #${n.s.rank} ${esc(n.s.nb)}</div></div>
   ${r.photo?`<img class="thumb" src="${r.photo}" alt="Photo attached to this report">`:''}
-  <table><tr><td>Make</td><td class="n">${esc(r.make||'—')}</td></tr><tr><td>Plate (partial)</td><td class="n">${esc(normPlate(r.plate)||'—')}</td></tr><tr><td>Marks</td><td class="n" style="white-space:normal;text-align:right">${esc((r.marks||[]).join(', ')||'—')}</td></tr><tr><td>Dumped</td><td class="n" style="white-space:normal;text-align:right">${esc((r.debris||[]).join(', ')||'—')}</td></tr><tr><td>Direction of travel</td><td class="n">${esc(r.dir||'—')}</td></tr></table>
+  <table>${r.addr?`<tr><td>Address given</td><td class="n" style="white-space:normal;text-align:right">${esc(r.addr)}</td></tr>`:''}<tr><td>Make</td><td class="n">${esc(r.make||'—')}</td></tr><tr><td>Plate (partial)</td><td class="n">${esc(normPlate(r.plate)||'—')}</td></tr><tr><td>Marks</td><td class="n" style="white-space:normal;text-align:right">${esc((r.marks||[]).join(', ')||'—')}</td></tr><tr><td>Dumped</td><td class="n" style="white-space:normal;text-align:right">${esc((r.debris||[]).join(', ')||'—')}</td></tr><tr><td>Direction of travel</td><td class="n">${esc(r.dir||'—')}</td></tr></table>
   ${r.note?`<p class="note" style="font-size:13px">“${esc(r.note)}”</p>`:''}
   ${c?`<button class="btn" id="go-case">Open Case ${c.id} (${c.idx.length} linked reports)</button>`:'<p class="note">Not linked to any other report yet. It will join a case automatically when a matching sighting comes in.</p>'}
   ${r.sample?'':'<button class="btn ghost" id="del-rep">Delete this report</button>'}
@@ -368,7 +398,12 @@ function openForm(siteIdx){
   <button class="back" type="button" id="back">← Cases</button>
   <div><h2 style="font:700 28px/1 var(--display);margin:0">Report a dumper</h2><p class="note" style="margin:4px 0 0">Every detail helps link this to other sightings. Leave out anything you did not see.</p></div>
   <p class="warn"><b>Stay safe.</b> Don't approach or confront anyone. Report from a distance. If someone is in danger, call 911.</p>
-  <div class="fld"><label for="f-site">Where</label><select id="f-site"><option value="">Choose a site…</option>${opts}<option value="map">Somewhere else: pick on the map</option></select><span class="note" id="locText"></span></div>
+  <div class="fld"><span class="lbl">Where</span>
+   <div class="seg" role="radiogroup" aria-label="How to give the location"><label><input type="radio" name="wmode" value="addr" id="wm-addr"${siteIdx===null?' checked':''}><span>Street address</span></label><label><input type="radio" name="wmode" value="site" id="wm-site"${siteIdx!==null?' checked':''}><span>Top-40 site</span></label><label><input type="radio" name="wmode" value="map" id="wm-map"><span>Pick on map</span></label></div>
+   <div id="w-addr" class="fld"><input type="text" id="f-addr" placeholder="e.g. 5909 Lillian Ave" autocomplete="off" aria-describedby="addrText"><span class="note" id="addrText">House number and street, City of St. Louis.</span></div>
+   <div id="w-site" class="fld" hidden><select id="f-site" aria-label="Top-40 site"><option value="">Choose a site…</option>${opts}</select></div>
+   <div id="w-map" hidden><span class="note" id="locText">Click the map where it happened.</span></div>
+  </div>
   <div class="fld"><label for="f-when">When</label><input type="datetime-local" id="f-when" value="${now}"></div>
   <div class="two"><div class="fld"><label for="f-vtype">Vehicle</label>${sel1('f-vtype',VTYPES,'Type…')}</div><div class="fld"><label for="f-color">Color</label>${sel1('f-color',COLORS,'Color…')}</div></div>
   <div class="two"><div class="fld"><label for="f-make">Make (if known)</label><input type="text" id="f-make" placeholder="e.g. Ford" autocomplete="off"></div><div class="fld"><label for="f-plate">Plate (partial is fine)</label><input type="text" id="f-plate" placeholder="e.g. 7KD or ?7K?" autocomplete="off"></div></div>
@@ -382,17 +417,23 @@ function openForm(siteIdx){
   <p class="note">Prototype: your report stays in this browser. In production it would go to the City's Environmental Investigations unit.</p>
  </form>`;
  $('back').onclick=()=>tabSet('cases');
- const upd=()=>{const v=$('f-site').value;if(v==='map'){setPick(true);$('locText').textContent=pickLoc?`Spot on map: ${pickLoc.lat.toFixed(5)}, ${pickLoc.lon.toFixed(5)}`:'Now click the map where it happened.'}
-  else{setPick(false);pickLoc=null;$('locText').textContent='';if(v!==''){const s=D.sites[+v];focus(s.lon,s.lat,Math.max(view.k,4))}else draw()}};
- $('f-site').onchange=upd;if(siteIdx!==null)upd();
+ let addrLoc=null,tm=null;const wmode=()=>document.querySelector('input[name="wmode"]:checked').value;
+ const showMode=()=>{const m=wmode();$('w-addr').hidden=m!=='addr';$('w-site').hidden=m!=='site';$('w-map').hidden=m!=='map';setPick(m==='map');
+  pickLoc=m==='addr'?addrLoc:m==='map'?null:null;if(m==='map')$('locText').textContent='Click the map where it happened.';if(m==='site')updSite();draw()};
+ const updSite=()=>{const v=$('f-site').value;if(v!==''){const s=D.sites[+v];focus(s.lon,s.lat,Math.max(view.k,4))}};
+ const look=()=>{const v=$('f-addr').value.trim(),r=geocode(v),t=$('addrText');addrLoc=r;
+  if(r){t.innerHTML=`<span class="ok">✓ Found:</span> ${esc(r.label)}${r.exact?'':' (nearest block on that street)'}`;pickLoc=r;focus(r.lon,r.lat,Math.max(view.k,6))}
+  else{pickLoc=null;t.textContent=v.length<5?'House number and street, City of St. Louis.':'No match yet. Check the house number and street name; only addresses inside the City of St. Louis can be found.';draw()}};
+ document.querySelectorAll('input[name="wmode"]').forEach(x=>x.onchange=showMode);
+ $('f-addr').oninput=()=>{clearTimeout(tm);tm=setTimeout(look,250)};$('f-site').onchange=updSite;showMode();
  $('f-photo').onchange=e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{photo=rd.result;$('f-thumb').src=photo;$('f-thumb').hidden=false};rd.readAsDataURL(f)};
  $('rep-form').onsubmit=e=>{e.preventDefault();const v=$('f-site').value,err=$('f-err');
-  let loc=null;if(v==='map')loc=pickLoc;else if(v!==''){const s=D.sites[+v];loc={lat:s.lat+(Math.random()-.5)*.0006,lon:s.lon+(Math.random()-.5)*.0006}}
+  const m=wmode();let loc=null;if(m==='addr')loc=addrLoc;else if(m==='map')loc=pickLoc;else if(v!==''){const s=D.sites[+v];loc={lat:s.lat+(Math.random()-.5)*.0006,lon:s.lon+(Math.random()-.5)*.0006}}
   const when=$('f-when').value,vt=$('f-vtype').value,co=$('f-color').value,pl=$('f-plate').value.trim(),mk=$('f-make').value.trim();
   const marks=[...document.querySelectorAll('input[name="f-marks"]:checked')].map(x=>x.value),debris=[...document.querySelectorAll('input[name="f-debris"]:checked')].map(x=>x.value);
-  const miss=[];if(!loc)miss.push(v==='map'?'click the map to set the spot':'choose where it happened');if(!when)miss.push('add the date and time');if(!vt&&!co&&!pl&&!marks.length)miss.push('describe the vehicle (type, color, plate or a mark)');
+  const miss=[];if(!loc)miss.push(m==='addr'?'enter a street address we can find in St. Louis':m==='map'?'click the map to set the spot':'choose a site');if(!when)miss.push('add the date and time');if(!vt&&!co&&!pl&&!marks.length)miss.push('describe the vehicle (type, color, plate or a mark)');
   if(miss.length){err.textContent='To submit, '+miss.join(', ')+'.';err.hidden=false;return}
-  const r={id:'U'+Date.now(),lat:loc.lat,lon:loc.lon,when,vtype:vt,color:co,make:mk,plate:pl,marks,debris,dir:$('f-dir').value||'Unknown',note:$('f-note').value.trim(),photo};
+  const r={id:'U'+Date.now(),lat:loc.lat,lon:loc.lon,addr:m==='addr'?$('f-addr').value.trim():'',when,vtype:vt,color:co,make:mk,plate:pl,marks,debris,dir:$('f-dir').value||'Unknown',note:$('f-note').value.trim(),photo};
   mine.push(r);saveMine();setPick(false);pickLoc=null;
   const {R,caseOf}=buildCases(),i=R.findIndex(x=>x.id===r.id),c=caseOf[i];draw();
   $('pane').innerHTML=`<div class="file"><div><span class="pill Y">Report saved</span><h2>${c?`Linked to Case ${c.id}`:'No match yet'}</h2>
@@ -428,5 +469,6 @@ function tabSet(t,render=true){tab=t;['act','cases','watch','how'].forEach(k=>$(
 window.addEventListener('resize',()=>{size();if(sel&&(sel.type==='s'||sel.type==='w')){const o=sel.type==='s'?D.sites[sel.i]:D.watch[sel.i];focus(o.lon,o.lat,view.k)}else{view={k:1,tx:0,ty:0};draw()}});
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change',draw);
 new MutationObserver(draw).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+$('hdr-report').onclick=()=>{openForm(null);if(innerWidth<=980)document.querySelector('.side').scrollIntoView({behavior:'smooth'})};
 size();list();
 </script>
