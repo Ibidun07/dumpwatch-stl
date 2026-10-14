@@ -1,0 +1,142 @@
+{
+ "window_days": 60,
+ "n": 25650,
+ "raw": [
+  {
+   "speed": "Fast (0-3 days)",
+   "n": 8111,
+   "repeat_pct": 46.1
+  },
+  {
+   "speed": "Medium (4-14 days)",
+   "n": 5707,
+   "repeat_pct": 46.3
+  },
+  {
+   "speed": "Slow (over 14 days)",
+   "n": 11832,
+   "repeat_pct": 45.3
+  }
+ ],
+ "adjusted": {
+  "fast": 49.7,
+  "slow": 43.0
+ },
+ "groups": [
+  {
+   "type": "Alley/street debris",
+   "activity": "0",
+   "n_fast": 1008,
+   "n_slow": 802,
+   "fast": 22.4,
+   "slow": 15.6,
+   "gap": -6.799999999999999
+  },
+  {
+   "type": "Alley/street debris",
+   "activity": "1-2",
+   "n_fast": 1975,
+   "n_slow": 1777,
+   "fast": 34.3,
+   "slow": 26.3,
+   "gap": -7.9999999999999964
+  },
+  {
+   "type": "Alley/street debris",
+   "activity": "3-9",
+   "n_fast": 2865,
+   "n_slow": 4126,
+   "fast": 51.5,
+   "slow": 46.7,
+   "gap": -4.799999999999997
+  },
+  {
+   "type": "Alley/street debris",
+   "activity": "10+",
+   "n_fast": 847,
+   "n_slow": 1872,
+   "fast": 73.0,
+   "slow": 63.8,
+   "gap": -9.200000000000003
+  },
+  {
+   "type": "Vacant building debris",
+   "activity": "0",
+   "n_fast": 55,
+   "n_slow": 49,
+   "fast": 29.1,
+   "slow": 28.6,
+   "gap": -0.5
+  },
+  {
+   "type": "Vacant building debris",
+   "activity": "1-2",
+   "n_fast": 148,
+   "n_slow": 172,
+   "fast": 34.5,
+   "slow": 37.8,
+   "gap": 3.299999999999997
+  },
+  {
+   "type": "Vacant building debris",
+   "activity": "3-9",
+   "n_fast": 310,
+   "n_slow": 740,
+   "fast": 55.2,
+   "slow": 49.9,
+   "gap": -5.300000000000004
+  },
+  {
+   "type": "Vacant building debris",
+   "activity": "10+",
+   "n_fast": 134,
+   "n_slow": 444,
+   "fast": 82.8,
+   "slow": 66.4,
+   "gap": -16.39999999999999
+  },
+  {
+   "type": "Vacant lot debris",
+   "activity": "0",
+   "n_fast": 81,
+   "n_slow": 113,
+   "fast": 28.4,
+   "slow": 18.6,
+   "gap": -9.799999999999997
+  },
+  {
+   "type": "Vacant lot debris",
+   "activity": "1-2",
+   "n_fast": 183,
+   "n_slow": 308,
+   "fast": 35.5,
+   "slow": 34.4,
+   "gap": -1.1000000000000014
+  },
+  {
+   "type": "Vacant lot debris",
+   "activity": "3-9",
+   "n_fast": 376,
+   "n_slow": 941,
+   "fast": 59.3,
+   "slow": 48.7,
+   "gap": -10.599999999999994
+  },
+  {
+   "type": "Vacant lot debris",
+   "activity": "10+",
+   "n_fast": 129,
+   "n_slow": 488,
+   "fast": 67.4,
+   "slow": 65.0,
+   "gap": -2.4000000000000057
+  }
+ ],
+ "groups_slow_worse": 1,
+ "groups_total": 12,
+ "median_days_to_close_by_type": {
+  "Alley/street debris": 9.6,
+  "Vacant building debris": 15.0,
+  "Vacant lot debris": 17.8
+ }
+}

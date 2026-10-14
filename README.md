@@ -7,6 +7,8 @@ DumpWatch turns the City's open data into a ranked to-do list:
 
 - **Act here next:** the 40 blocks most likely to be dumped on in the coming year. Each one has an evidence file with its report history, repeat addresses, the weekdays dumping gets reported, nearby vacant and city-owned property, and a recommended action (camera, secure lots, board-up, alley lighting and signs).
 - **Watch list:** 25 blocks with no dumping reports for three years that are surrounded by the conditions that came before dumping elsewhere. Secure them before the first pile appears.
+- **Cases:** a witness-report form (vehicle, color, make, partial plate, marks, what was dumped, photo) that links sightings from different sites into one case file for investigators, with the reasons for each link and suggested next steps. Runs on clearly labeled sample reports; reports you add stay in your browser.
+- **Enforcement record:** each site file shows how witnessed reports there ended (summons, arrest, warning, or closed for lack of evidence), and a map layer shows high-risk blocks with no enforcement since 2022.
 - **Does it work?:** the model was trained on data through 2025 and tested on January–October 2026 reports it never saw.
 
 Open `outputs/dumpwatch.html` in any browser. It is a single self-contained file with no server.
@@ -22,6 +24,12 @@ Open `outputs/dumpwatch.html` in any browser. It is a single self-contained file
 | Top 10% | 36% | 31% | 10% |
 
 **Watch list:** among 592 blocks with no reports in 2023–2025, the top fifth by land score got a first dumping report in 2026 at **29%**, versus 15% for all quiet blocks (AUC 0.71).
+
+**Why catching dumpers is hard:** since 2022, 3,488 witnessed-dumping reports went to the City's Environmental Investigations unit. Of the 2,951 with a recorded outcome, 52% ended in a summons (775) or arrest (749), and **36% (1,067) were closed for lack of evidence**, including 159 where the caller's information was wrong.
+
+**Enforcement gap:** 110 of 199 Critical and High blocks have had no summons or arrest since 2022. In 80 of them someone witnessed dumping but no case resulted; in 30, no one ever reported seeing it.
+
+**Fast cleanup (tested, not supported):** matching blocks by report type and prior activity, a new report followed within 60 days after 49.7% of fast cleanups (0–3 days) and 43.0% of slow ones (over 14 days). Cleaner blocks probably make new dumping easier to see and report, so 311 data cannot answer this; it needs a controlled pilot.
 
 **Note:** a history-only version of the model (step 6a) scores about the same on the top 5% (24%). Adding land data mainly helps with blocks that have no dumping history, which is what the watch list is for.
 
@@ -65,7 +73,9 @@ Then open `outputs/dumpwatch.html`.
 | 6 | `06_risk_model.py` | Poisson gradient-boosted model predicting next-year report count per cell. Features: report counts over 1/2/3/5 years, report-type mix, years active, days since last report, neighbors' counts (3×3 and 5×5), and land features. Trained on 2021–2024 outcomes, tested on 2025, then refit through 2025 and tested on 2026. Run with `hist` for the history-only baseline. Writes `risk_cells.csv` with tiers: Critical (top 1%), High (95–99th percentile), Elevated (80–95th), Low. |
 | 7 | `07_watchlist_test.py` | Tests whether land features predict a first report in blocks that had none for three years (logistic regression, trained 2022–2025, tested 2026). |
 | 8 | `08_site_profiles.py` | Builds evidence files for the top 40 cells, the 25-block watch list, and simplified map layers. Writes `app_data.json`. |
-| 9 | `09_build_pages.py` | Injects JSON into the HTML templates in `web/` to produce the two self-contained pages. |
+| 10 | `10_enforcement.py` | Groups the outcomes of witnessed reports (`PUBLICRESOLUTION`: summons, arrest, warning, not enough evidence), counts them per site and per year, and finds high-risk blocks with no summons or arrest. Writes `enforcement.json`. |
+| 11 | `11_cleanup_speed.py` | Tests whether fast closure of debris reports is followed by fewer repeat reports within 60 days, matching blocks by report type and prior-year activity. Writes `cleanup_speed.json`. |
+| 9 | `09_build_pages.py` | Merges steps 10–11 into the app data and injects it into the HTML templates in `web/` to produce the two self-contained pages. Runs last. |
 
 `explore_problem_codes.py` is the exploration script used to find which 311 problem codes relate to dumping.
 
@@ -95,7 +105,10 @@ Then open `outputs/dumpwatch.html`.
 
 - Add SLMPD dumping citations and camera locations to measure deterrence.
 - Get a building permit export to flag contractors working near construction-debris sites.
-- Add a structured reporting form (vehicle make, color, partial plate, direction) so incidents can be linked across sites.
+- Connect the Cases form (prototyped in the app) to the Citizens' Service Bureau so real witness reports are linked across sites.
+- Have crews photograph each pile and check it for addressed mail or receipts before hauling; log debris type.
+- Require landfill or transfer-station receipts before construction and demolition permits close.
+- Run a controlled pilot of 48-hour cleanup at half of the top sites to measure its effect on repeat dumping.
 - Re-run weekly, since the 311 data updates weekly.
 
 ## Project layout

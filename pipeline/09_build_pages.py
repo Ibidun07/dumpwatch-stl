@@ -1,13 +1,19 @@
 """Step 9: Inject the JSON data into the HTML templates to make self-contained pages.
 
 Usage: python 09_build_pages.py web outputs
+Merges enforcement.json (step 10) and cleanup_speed.json (step 11) into the app data when present.
 Outputs: outputs/dumpwatch.html (the app), outputs/dumping-atlas.html (first-look page)
 """
-import sys
+import json, os, sys
 
 w, o = sys.argv[1], sys.argv[2]
-for tpl, data, out in [('dumpwatch_template.html', 'app_data.json', 'dumpwatch.html'),
-                       ('first_look_template.html', 'first_look.json', 'dumping-atlas.html')]:
-    html = open(f'{w}/{tpl}').read().replace('__DATA__', open(f'{o}/{data}').read())
+app = json.load(open(f'{o}/app_data.json'))
+for key, fname in [('enf', 'enforcement.json'), ('speed', 'cleanup_speed.json')]:
+    if os.path.exists(f'{o}/{fname}'):
+        app[key] = json.load(open(f'{o}/{fname}'))
+pages = [('dumpwatch_template.html', json.dumps(app, separators=(',', ':')), 'dumpwatch.html'),
+         ('first_look_template.html', open(f'{o}/first_look.json').read(), 'dumping-atlas.html')]
+for tpl, data, out in pages:
+    html = open(f'{w}/{tpl}').read().replace('__DATA__', data)
     open(f'{o}/{out}', 'w').write(html)
     print('built', out, len(html) // 1024, 'KB')

@@ -2,26 +2,26 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: operations console. Map fills the left; a ranked work queue and site file sit on the right. */
+/* Layout: operations console. Map fills the left; a ranked work queue, case files and site files sit on the right. */
 :root{
  --bg:#eef0ee; --panel:#ffffff; --ink:#1c2226; --muted:#5b666d; --rule:#d7dbd8; --sunk:#f5f6f4;
  --low:#d9dcd4; --t1:#e9a640; --t2:#cf5a2c; --t3:#7d1d22; --watch:#2f6f8f; --road:#b9c0bc; --nb:#9aa39e;
- --accent:#cf5a2c; --good:#2e7d4f;
+ --accent:#cf5a2c; --good:#2e7d4f; --c1:#6b4fbb; --c2:#1f8a70; --c3:#b0478a; --c4:#8a6d1f;
  --display:"Barlow Condensed","Arial Narrow",sans-serif; --body:"Public Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
 }
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121619;--panel:#1b2125;--ink:#e6e9e7;--muted:#9aa5ab;--rule:#2d353a;--sunk:#161b1e;--low:#2a3236;--t1:#c98a2f;--t2:#ea6a3b;--t3:#ffb08a;--watch:#6fb3d4;--road:#3a4449;--nb:#56626a;--accent:#ea6a3b;--good:#5fbf86;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#121619;--panel:#1b2125;--ink:#e6e9e7;--muted:#9aa5ab;--rule:#2d353a;--sunk:#161b1e;--low:#2a3236;--t1:#c98a2f;--t2:#ea6a3b;--t3:#ffb08a;--watch:#6fb3d4;--road:#3a4449;--nb:#56626a;--accent:#ea6a3b;--good:#5fbf86;color-scheme:dark}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121619;--panel:#1b2125;--ink:#e6e9e7;--muted:#9aa5ab;--rule:#2d353a;--sunk:#161b1e;--low:#2a3236;--t1:#c98a2f;--t2:#ea6a3b;--t3:#ffb08a;--watch:#6fb3d4;--road:#3a4449;--nb:#56626a;--accent:#ea6a3b;--good:#5fbf86;--c1:#a993f0;--c2:#5fd0b0;--c3:#e58cc5;--c4:#d8b45a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#121619;--panel:#1b2125;--ink:#e6e9e7;--muted:#9aa5ab;--rule:#2d353a;--sunk:#161b1e;--low:#2a3236;--t1:#c98a2f;--t2:#ea6a3b;--t3:#ffb08a;--watch:#6fb3d4;--road:#3a4449;--nb:#56626a;--accent:#ea6a3b;--good:#5fbf86;--c1:#a993f0;--c2:#5fd0b0;--c3:#e58cc5;--c4:#d8b45a;color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.45}
 .top{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:end;justify-content:space-between;padding-block:18px 14px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));border-bottom:1px solid var(--rule);background:var(--panel)}
 .brand{font:700 30px/1 var(--display);letter-spacing:.01em;margin:0}
 .brand small{display:block;font:500 12px/1.4 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:4px}
 .kpis{display:flex;flex-wrap:wrap;gap:12px 20px}
-.kpi{flex:1 1 110px;min-width:0}
+.kpi{flex:1 1 110px;min-width:0;max-width:200px}
 @media (max-width:600px){.hint{display:none}.brand{font-size:26px}.kpi b{font-size:20px}}
 .kpi b{display:block;font:600 24px/1 var(--display);font-variant-numeric:tabular-nums}
 .kpi span{font-size:12px;color:var(--muted)}
-.grid{display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:16px;padding-block:16px 32px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));max-width:1500px;margin:0 auto}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 440px;gap:16px;padding-block:16px 32px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));max-width:1500px;margin:0 auto}
 @media (max-width:980px){.grid{grid-template-columns:1fr}}
 .panel{background:var(--panel);border:1px solid var(--rule);min-width:0}
 .mapwrap{position:relative}
@@ -30,29 +30,30 @@ body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1
 .chip{font:500 12px var(--body);border:1px solid var(--rule);background:transparent;color:var(--muted);padding:5px 10px;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
 .chip[aria-pressed="true"]{color:var(--ink);border-color:var(--ink)}
 .chip i{width:10px;height:10px;display:inline-block}
-.chip:focus-visible,.row:focus-visible,.tab:focus-visible,.zbtn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.chip:focus-visible,.row:focus-visible,.tab:focus-visible,.zbtn:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 canvas{display:block;width:100%;height:auto;max-width:100%;touch-action:none;cursor:grab}
 canvas:active{cursor:grabbing}
+canvas.picking{cursor:crosshair}
 .zoom{position:absolute;right:12px;bottom:12px;display:flex;flex-direction:column;border:1px solid var(--rule);background:var(--panel)}
 .zbtn{width:34px;height:34px;border:0;background:transparent;color:var(--ink);font:600 18px var(--body);cursor:pointer}
 .zbtn+.zbtn{border-top:1px solid var(--rule)}
 .hint{position:absolute;left:12px;bottom:12px;font:11px var(--mono);color:var(--muted);background:var(--panel);padding:3px 6px;border:1px solid var(--rule)}
+.hint.on{color:var(--panel);background:var(--ink);border-color:var(--ink)}
 .side{display:flex;flex-direction:column;max-height:calc(100vh - 140px);min-height:560px}
 @media (max-width:980px){.side{max-height:none}}
 .tabs{display:flex;border-bottom:1px solid var(--rule)}
-.tab{flex:1;font:600 13px var(--body);padding:11px 8px;background:transparent;border:0;border-bottom:2px solid transparent;color:var(--muted);cursor:pointer}
+.tab{flex:1;font:600 13px var(--body);padding:11px 6px;background:transparent;border:0;border-bottom:2px solid transparent;color:var(--muted);cursor:pointer;white-space:nowrap}
 .tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
 .pane{overflow:auto;flex:1}
 .lede{font-size:13px;color:var(--muted);padding:12px 14px;margin:0;border-bottom:1px solid var(--rule)}
 .row{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--rule);cursor:pointer;background:transparent;width:100%;text-align:left;border-left:0;border-right:0;border-top:0;color:inherit;font:inherit}
 .row:hover{background:var(--sunk)}
-.row.sel{background:var(--sunk);box-shadow:inset 3px 0 0 var(--accent)}
 .rk{font:600 20px/1 var(--display);font-variant-numeric:tabular-nums;color:var(--muted)}
 .rt{min-width:0}
 .rt b{display:block;font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rt span{font-size:12px;color:var(--muted)}
 .pill{font:500 10px var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:3px 6px;border:1px solid currentColor;white-space:nowrap}
-.pill.C{color:var(--t3)}.pill.H{color:var(--t2)}.pill.W{color:var(--watch)}
+.pill.C{color:var(--t3)}.pill.H{color:var(--t2)}.pill.W{color:var(--watch)}.pill.S{color:var(--muted)}.pill.Y{color:var(--good)}
 .trend{font:500 12px var(--mono);white-space:nowrap}
 .up{color:var(--accent)}.down{color:var(--good)}
 .file{padding:14px;display:grid;gap:16px}
@@ -60,7 +61,7 @@ canvas:active{cursor:grabbing}
 .file h2{font:700 28px/1 var(--display);margin:4px 0 2px;text-wrap:balance}
 .meta{font-size:13px;color:var(--muted)}
 .facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule)}
-.facts div{background:var(--panel);padding:10px}
+.facts div{background:var(--panel);padding:10px;min-width:0}
 .facts b{display:block;font:600 22px/1 var(--display);font-variant-numeric:tabular-nums}
 .facts span{font-size:11px;color:var(--muted)}
 h3{font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
@@ -76,11 +77,31 @@ svg text{font-family:var(--mono);font-size:10px;fill:var(--muted)}
 .how p{margin:0;max-width:62ch}
 .vt td{padding:7px 0}
 .note{font-size:12px;color:var(--muted)}
-.tip{position:fixed;pointer-events:none;background:var(--ink);color:var(--bg);font:12px/1.4 var(--mono);padding:6px 8px;z-index:5;max-width:260px}
+.tip{position:fixed;pointer-events:none;background:var(--ink);color:var(--bg);font:12px/1.4 var(--mono);padding:6px 8px;z-index:5;max-width:280px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;padding:12px 14px;border-bottom:1px solid var(--rule)}
+.btn{font:600 13px var(--body);background:var(--ink);color:var(--bg);border:1px solid var(--ink);padding:9px 14px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--rule)}
+.sec{font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:12px 14px 6px;margin:0}
+.form{padding:14px;display:grid;gap:14px}
+.fld{display:grid;gap:5px;min-width:0}
+.fld>label,.lbl{font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.form input[type=text],.form input[type=datetime-local],.form select,.form textarea{font:14px var(--body);color:var(--ink);background:var(--panel);border:1px solid var(--rule);padding:8px;width:100%;min-width:0}
+.form textarea{min-height:56px;resize:vertical}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.checks{display:flex;flex-wrap:wrap;gap:6px}
+.checks label{font:13px var(--body);border:1px solid var(--rule);padding:4px 8px;display:inline-flex;gap:6px;align-items:center;cursor:pointer}
+.checks input:checked+span{font-weight:600}
+.warn{font-size:12px;border-left:3px solid var(--accent);padding:8px 10px;background:var(--sunk);margin:0}
+.why{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.why span{font:11px var(--mono);border:1px solid var(--rule);padding:2px 6px;color:var(--muted)}
+.dot{width:12px;height:12px;display:inline-block;border-radius:2px;vertical-align:-1px}
+.err{color:var(--accent);font-size:13px;margin:0}
+.thumb{max-width:100%;max-height:160px;border:1px solid var(--rule)}
+.link{border:1px solid var(--rule);padding:8px 10px;font-size:13px}
 </style>
 
 <header class="top">
- <div><h1 class="brand">DumpWatch STL<small>Illegal dumping risk and enforcement queue · data through <span id="asof"></span></small></h1></div>
+ <div><h1 class="brand">DumpWatch STL<small>Illegal dumping risk, cases and enforcement queue · data through <span id="asof"></span></small></h1></div>
  <div class="kpis" id="kpis"></div>
 </header>
 
@@ -91,21 +112,19 @@ svg text{font-family:var(--mono);font-size:10px;fill:var(--muted)}
     <button class="chip" id="L-cells" aria-pressed="true"><i style="background:var(--t2)"></i>Risk blocks</button>
     <button class="chip" id="L-sites" aria-pressed="true"><i style="background:var(--t3)"></i>Top 40 sites</button>
     <button class="chip" id="L-watch" aria-pressed="true"><i style="background:var(--watch)"></i>Watch list</button>
-   </div>
-   <div class="chips" aria-hidden="true">
-    <span class="chip" style="cursor:default"><i style="background:var(--t1)"></i>Elevated</span>
-    <span class="chip" style="cursor:default"><i style="background:var(--t2)"></i>High</span>
-    <span class="chip" style="cursor:default"><i style="background:var(--t3)"></i>Critical</span>
+    <button class="chip" id="L-gap" aria-pressed="false"><i style="border:2px dashed var(--ink);background:transparent"></i>No enforcement</button>
+    <button class="chip" id="L-cases" aria-pressed="true"><i style="background:var(--c1)"></i>Cases</button>
    </div>
   </div>
   <canvas id="map" aria-label="Map of St. Louis showing dumping risk by block"></canvas>
-  <div class="hint">Drag to pan · scroll or +/− to zoom · click a marker</div>
+  <div class="hint" id="hint">Drag to pan · scroll or +/− to zoom · click a marker</div>
   <div class="zoom"><button class="zbtn" id="zin" aria-label="Zoom in">+</button><button class="zbtn" id="zout" aria-label="Zoom out">−</button><button class="zbtn" id="zreset" aria-label="Reset view" style="font-size:13px">⟲</button></div>
  </section>
 
  <aside class="panel side">
   <div class="tabs" role="tablist">
    <button class="tab" role="tab" id="t-act" aria-selected="true">Act here next</button>
+   <button class="tab" role="tab" id="t-cases" aria-selected="false">Cases</button>
    <button class="tab" role="tab" id="t-watch" aria-selected="false">Watch list</button>
    <button class="tab" role="tab" id="t-how" aria-selected="false">Does it work?</button>
   </div>
@@ -119,24 +138,77 @@ const D=__DATA__;
 const $=id=>document.getElementById(id),fmt=n=>n.toLocaleString('en-US');
 const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
 const clean=s=>String(s).replace(/\s+/g,' ').replace(/ Av$/,' Ave').trim();
-const V=D.val.validation_2026;
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const V=D.val.validation_2026, E=D.enf?D.enf.summary:null;
+const pct=(a,b)=>Math.round(a/b*100);
 $('asof').textContent=new Date(D.asof+'T12:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-$('kpis').innerHTML=[[D.tiers.Critical+D.tiers.High,'critical + high-risk blocks'],[Math.round(V.model[1])+'%','of 2026 dumping caught by top 5% of blocks'],[D.watch.length,'quiet blocks on the watch list']]
- .map(([b,s])=>`<div class="kpi"><b>${b}</b><span>${s}</span></div>`).join('');
+const kp=[[D.tiers.Critical+D.tiers.High,'critical + high-risk blocks'],[Math.round(V.model[1])+'%','of 2026 dumping caught by top 5% of blocks']];
+if(E)kp.push([Math.round(E.evidence_fail_share_of_decided)+'%','of witnessed-dumping cases closed: not enough evidence']);
+kp.push([D.watch.length,'quiet blocks on the watch list']);
+$('kpis').innerHTML=kp.map(([b,s])=>`<div class="kpi"><b>${b}</b><span>${s}</span></div>`).join('');
+
+/* ---------- witness reports and case linking ---------- */
+const VTYPES=['Pickup','Pickup with trailer','Box truck','Van','SUV','Car','Dump truck','Other'];
+const COLORS=['White','Black','Silver/Gray','Red','Blue','Green','Brown/Tan','Other'];
+const MARKS=['Ladder rack','Trailer','Company logo/lettering','Out-of-state plate','Temporary tag','Damage/dents'];
+const DEBRIS=['Construction debris','Tires','Mattress/furniture','Household bags','Yard waste','Appliances'];
+const DIRS=['Unknown','North','South','East','West'];
+// SAMPLE reports: invented to demonstrate linking. Placed near real top-40 sites; no real people or vehicles.
+const SAMPLES=[
+ {id:'S1',site:4,dx:.0004,dy:.0003,when:'2026-09-08T07:40',vtype:'Pickup with trailer',color:'White',make:'Ford',plate:'?7KD',marks:['Ladder rack','Trailer'],debris:['Construction debris'],dir:'North',note:'Unloaded drywall and shingles in about 10 minutes.'},
+ {id:'S2',site:7,dx:-.0003,dy:.0002,when:'2026-09-15T07:15',vtype:'Pickup with trailer',color:'White',make:'',plate:'7KD2',marks:['Ladder rack'],debris:['Construction debris'],dir:'East',note:'Same kind of load as last week on this alley.'},
+ {id:'S3',site:3,dx:.0002,dy:-.0003,when:'2026-09-29T08:05',vtype:'Pickup',color:'White',make:'Ford',plate:'',marks:['Ladder rack','Trailer'],debris:['Construction debris','Household bags'],dir:'South',note:'Plate covered by the trailer.'},
+ {id:'S4',site:10,dx:.0003,dy:.0002,when:'2026-09-12T18:30',vtype:'Box truck',color:'Blue',make:'Isuzu',plate:'',marks:['Company logo/lettering'],debris:['Tires'],dir:'West',note:'About 30 tires. Logo partly covered with tape.'},
+ {id:'S5',site:2,dx:-.0002,dy:.0003,when:'2026-10-03T19:10',vtype:'Box truck',color:'Blue',make:'',plate:'M4?',marks:['Company logo/lettering','Out-of-state plate'],debris:['Tires'],dir:'North',note:'Two people unloading tires behind vacant building.'},
+ {id:'S6',site:1,dx:.0002,dy:.0002,when:'2026-09-20T22:00',vtype:'Car',color:'Black',make:'',plate:'',marks:[],debris:['Household bags'],dir:'Unknown',note:'Bags thrown from car window.'},
+ {id:'S7',site:5,dx:-.0003,dy:-.0002,when:'2026-10-06T06:50',vtype:'SUV',color:'Silver/Gray',make:'',plate:'',marks:[],debris:['Mattress/furniture'],dir:'Unknown',note:'Mattress and two chairs left at the curb.'}
+].map(r=>{const s=D.sites[r.site-1];return {...r,sample:true,lat:s.lat+r.dy,lon:s.lon+r.dx}});
+let mine=[];try{mine=JSON.parse(localStorage.getItem('dw_reports')||'[]')}catch(e){mine=[]}
+const saveMine=()=>{try{localStorage.setItem('dw_reports',JSON.stringify(mine.map(r=>({...r,photo:undefined}))))}catch(e){}};
+const allReports=()=>SAMPLES.concat(mine);
+const km=(a,b)=>{const R=6371,t=Math.PI/180,dla=(b.lat-a.lat)*t,dlo=(b.lon-a.lon)*t;const h=Math.sin(dla/2)**2+Math.cos(a.lat*t)*Math.cos(b.lat*t)*Math.sin(dlo/2)**2;return 2*R*Math.asin(Math.sqrt(h))};
+const normPlate=p=>String(p||'').toUpperCase().replace(/[^A-Z0-9?]/g,'');
+function plateFrag(a,b){a=normPlate(a);b=normPlate(b);let best='';
+ for(let i=0;i<a.length;i++)for(let j=0;j<b.length;j++){let k=0;while(i+k<a.length&&j+k<b.length&&a[i+k]===b[j+k]&&a[i+k]!=='?')k++;if(k>best.length)best=a.substr(i,k)}return best}
+const fam=t=>t&&t.startsWith('Pickup')?'Pickup':t;
+function score(a,b){let s=0;const why=[];
+ if(a.vtype&&b.vtype&&a.vtype!=='Other'&&b.vtype!=='Other'){if(a.vtype===b.vtype){s+=3;why.push('same vehicle type')}else if(fam(a.vtype)===fam(b.vtype)){s+=1.5;why.push('both pickups')}else return null}
+ if(a.color&&b.color){if(a.color===b.color){s+=2;why.push(`both ${a.color.toLowerCase()}`)}else s-=3}
+ if(a.make&&b.make){if(a.make.toLowerCase()===b.make.toLowerCase()){s+=2;why.push(`both ${a.make}`)}else s-=4}
+ const f=plateFrag(a.plate,b.plate);if(f.length>=3){s+=4;why.push(`plate fragment ${f}`)}else if(f.length===2){s+=1.5;why.push(`plate ${f}`)}
+ (a.marks||[]).filter(m=>(b.marks||[]).includes(m)).forEach(m=>{s+=1.5;why.push(m.toLowerCase())});
+ const deb=(a.debris||[]).filter(m=>(b.debris||[]).includes(m));deb.slice(0,2).forEach(m=>{s+=1;why.push(m.toLowerCase())});
+ const days=Math.abs(Date.parse(a.when)-Date.parse(b.when))/864e5;if(days<=60){s+=1;why.push(`${Math.round(days)} days apart`)}else if(days>180)s-=2;
+ const d=km(a,b);if(d<=5){s+=1;why.push(`${d.toFixed(1)} km apart`)}
+ return {s,why}}
+const LINK=7;
+function buildCases(){
+ const R=allReports(),n=R.length,par=R.map((_,i)=>i),find=i=>par[i]===i?i:(par[i]=find(par[i]));const links=[];
+ for(let i=0;i<n;i++)for(let j=i+1;j<n;j++){const sc=score(R[i],R[j]);if(sc&&sc.s>=LINK){links.push({a:i,b:j,...sc});par[find(i)]=find(j)}}
+ const groups={};R.forEach((r,i)=>{const k=find(i);(groups[k]=groups[k]||[]).push(i)});
+ const cases=Object.values(groups).filter(g=>g.length>1).map(g=>g.sort((x,y)=>Date.parse(R[x].when)-Date.parse(R[y].when)))
+  .sort((x,y)=>Date.parse(R[x[0]].when)-Date.parse(R[y[0]].when))
+  .map((g,ci)=>({id:String.fromCharCode(65+ci),idx:g,links:links.filter(l=>g.includes(l.a)),color:['--c1','--c2','--c3','--c4'][ci%4]}));
+ const caseOf={};cases.forEach(c=>c.idx.forEach(i=>caseOf[i]=c));return {R,cases,caseOf}}
+const nearestSite=r=>{let best=null,bd=1e9;D.sites.forEach(s=>{const d=km(r,s);if(d<bd){bd=d;best=s}});return {s:best,d:bd}};
+const when=r=>new Date(r.when).toLocaleString('en-US',{weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
+const mode=a=>{const c={};a.filter(Boolean).forEach(x=>c[x]=(c[x]||0)+1);return Object.keys(c).sort((x,y)=>c[y]-c[x])[0]||''};
+function describe(c,R){const rs=c.idx.map(i=>R[i]);const v=[mode(rs.map(r=>r.color)),mode(rs.map(r=>r.make)),mode(rs.map(r=>r.vtype))].filter(Boolean).join(' ');
+ const marks=[...new Set(rs.flatMap(r=>r.marks||[]))];return {rs,v:v||'Unknown vehicle',marks}}
 
 /* ---------- map ---------- */
 const cv=$('map'),ctx=cv.getContext('2d');
 const lats=[],lons=[];D.nb.forEach(n=>n.rings.forEach(r=>r.forEach(([x,y])=>{lons.push(x);lats.push(y)})));
 const B={lo0:Math.min(...lons),lo1:Math.max(...lons),la0:Math.min(...lats),la1:Math.max(...lats)},K=Math.cos(38.63*Math.PI/180);
-let W=0,H=0,base=1,view={k:1,tx:0,ty:0},layers={cells:true,sites:true,watch:true},sel=null,hits=[];
+let W=0,H=0,base=1,view={k:1,tx:0,ty:0},layers={cells:true,sites:true,watch:true,gap:false,cases:true},sel=null,hits=[],pick=false,pickLoc=null;
 function size(){const w=cv.parentElement.clientWidth,h=Math.max(420,Math.min(window.innerHeight-200,w*1.05));
  W=w;H=h;const dpr=window.devicePixelRatio||1;cv.width=w*dpr;cv.height=h*dpr;cv.style.height=h+'px';ctx.setTransform(dpr,0,0,dpr,0,0);
  base=Math.min((W-24)/((B.lo1-B.lo0)*K),(H-24)/(B.la1-B.la0));draw()}
 function P(lo,la){const s=base*view.k;const cx=W/2+((lo-(B.lo0+B.lo1)/2)*K*s)+view.tx,cy=H/2-((la-(B.la0+B.la1)/2)*s)+view.ty;return[cx,cy]}
+function unP(x,y){const s=base*view.k;return {lon:(x-W/2-view.tx)/(K*s)+(B.lo0+B.lo1)/2,lat:-(y-H/2-view.ty)/s+(B.la0+B.la1)/2}}
 function draw(){
  ctx.fillStyle=css('--panel');ctx.fillRect(0,0,W,H);hits=[];
  const s=base*view.k,cw=0.00225*K*s,ch=0.00176*s;
- // neighborhoods fill
  ctx.lineWidth=1;ctx.strokeStyle=css('--nb');ctx.fillStyle=css('--sunk');
  D.nb.forEach(n=>n.rings.forEach(r=>{ctx.beginPath();r.forEach(([x,y],i)=>{const[a,b]=P(x,y);i?ctx.lineTo(a,b):ctx.moveTo(a,b)});ctx.closePath();ctx.fill()}));
  if(layers.cells){const col={L:css('--low'),E:css('--t1'),H:css('--t2'),C:css('--t3')};
@@ -147,39 +219,55 @@ function draw(){
  D.nb.forEach(n=>n.rings.forEach(r=>{ctx.beginPath();r.forEach(([x,y],i)=>{const[a,b]=P(x,y);i?ctx.lineTo(a,b):ctx.moveTo(a,b)});ctx.closePath();ctx.stroke()}));
  if(view.k>=2.2){ctx.fillStyle=css('--muted');ctx.font='11px "IBM Plex Mono",monospace';ctx.textAlign='center';
   D.nb.forEach(n=>{const r=n.rings[0];let sx=0,sy=0;r.forEach(([x,y])=>{sx+=x;sy+=y});const[a,b]=P(sx/r.length,sy/r.length);if(a>0&&a<W&&b>0&&b<H)ctx.fillText(n.name.toUpperCase(),a,b)})}
+ if(layers.gap&&D.enf){ctx.strokeStyle=css('--ink');ctx.lineWidth=1.5;ctx.setLineDash([3,2]);const g=Math.max(cw,ch)*1.5+4;
+  D.enf.gap_all.forEach(c=>{const[x,y]=P(c[1],c[0]);ctx.strokeRect(x-g/2,y-g/2,g,g)});ctx.setLineDash([])}
  if(layers.watch)D.watch.forEach((w,i)=>{const[x,y]=P(w.lon,w.lat),r=6;ctx.save();ctx.translate(x,y);ctx.rotate(Math.PI/4);ctx.fillStyle=css('--panel');ctx.strokeStyle=css('--watch');ctx.lineWidth=2;ctx.fillRect(-r,-r,2*r,2*r);ctx.strokeRect(-r,-r,2*r,2*r);ctx.restore();hits.push({x,y,r:10,type:'w',i})});
  if(layers.sites)D.sites.slice().reverse().forEach(st=>{const[x,y]=P(st.lon,st.lat),on=sel&&sel.type==='s'&&sel.i===st.rank-1,r=on?13:st.rank<=10?11:9;
   ctx.beginPath();ctx.arc(x,y,r,0,7);ctx.fillStyle=on?css('--ink'):css('--t3');ctx.fill();ctx.lineWidth=2;ctx.strokeStyle=css('--panel');ctx.stroke();
   ctx.fillStyle=on?css('--panel'):'#fff';ctx.font=`600 ${r>9?11:10}px "Public Sans",sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(st.rank,x,y+.5);ctx.textBaseline='alphabetic';
   hits.push({x,y,r:r+3,type:'s',i:st.rank-1})});
- if(sel&&sel.type==='w'){const w=D.watch[sel.i],[x,y]=P(w.lon,w.lat);ctx.beginPath();ctx.arc(x,y,14,0,7);ctx.strokeStyle=css('--ink');ctx.lineWidth=2;ctx.stroke()}
+ if(layers.cases){const {R,cases,caseOf}=buildCases();
+  cases.forEach(c=>{const col=css(c.color),on=sel&&sel.type==='c'&&sel.id===c.id;ctx.strokeStyle=col;ctx.lineWidth=on?3.5:2.5;ctx.setLineDash([6,4]);ctx.beginPath();
+   c.idx.forEach((i,k)=>{const[x,y]=P(R[i].lon,R[i].lat);k?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.stroke();ctx.setLineDash([])});
+  R.forEach((r,i)=>{const[x,y]=P(r.lon,r.lat),c=caseOf[i],col=c?css(c.color):css('--muted'),z=7;ctx.beginPath();ctx.moveTo(x,y-z);ctx.lineTo(x+z,y+z*.8);ctx.lineTo(x-z,y+z*.8);ctx.closePath();
+   ctx.fillStyle=col;ctx.fill();ctx.lineWidth=1.5;ctx.strokeStyle=css('--panel');ctx.stroke();hits.push({x,y,r:10,type:'r',i})})}
+ if(pickLoc){const[x,y]=P(pickLoc.lon,pickLoc.lat);ctx.strokeStyle=css('--ink');ctx.lineWidth=2;ctx.beginPath();ctx.arc(x,y,9,0,7);ctx.moveTo(x-14,y);ctx.lineTo(x+14,y);ctx.moveTo(x,y-14);ctx.lineTo(x,y+14);ctx.stroke()}
 }
 function zoomAt(f,mx,my){const k=Math.min(14,Math.max(1,view.k*f));f=k/view.k;view.tx=(view.tx-(mx-W/2))*f+(mx-W/2);view.ty=(view.ty-(my-H/2))*f+(my-H/2);view.k=k;if(k===1){view.tx=0;view.ty=0}draw()}
 function focus(lo,la,k){view.k=k;view.tx=0;view.ty=0;const[x,y]=P(lo,la);view.tx=W/2-x;view.ty=H/2-y;draw()}
+function fit(pts){if(!pts.length)return;const la=pts.map(p=>p.lat),lo=pts.map(p=>p.lon);const cla=(Math.min(...la)+Math.max(...la))/2,clo=(Math.min(...lo)+Math.max(...lo))/2;
+ const span=Math.max((Math.max(...lo)-Math.min(...lo))*K,(Math.max(...la)-Math.min(...la)),0.004);const k=Math.max(1,Math.min(8,(Math.min(W,H)*0.6)/(span*base)));focus(clo,cla,k)}
 cv.addEventListener('wheel',e=>{e.preventDefault();const r=cv.getBoundingClientRect();zoomAt(e.deltaY<0?1.25:0.8,e.clientX-r.left,e.clientY-r.top)},{passive:false});
 let drag=null,moved=false;
 cv.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,tx:view.tx,ty:view.ty};moved=false;cv.setPointerCapture(e.pointerId)});
 cv.addEventListener('pointermove',e=>{const r=cv.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;
  if(drag){const dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(Math.abs(dx)+Math.abs(dy)>3)moved=true;if(moved){view.tx=drag.tx+dx;view.ty=drag.ty+dy;draw()}return}
- const h=hit(mx,my),tip=$('tip');if(!h){tip.hidden=true;return}tip.hidden=false;tip.style.left=Math.min(e.clientX+12,innerWidth-270)+'px';tip.style.top=e.clientY+12+'px';
- if(h.type==='s'){const s=D.sites[h.i];tip.textContent=`#${s.rank} ${s.nb} · ${s.n_recent} reports since 2022`}else{const w=D.watch[h.i];tip.textContent=`Watch: ${w.nb} · no reports in 3 yrs · ${w.p}% est. chance of first report`}});
-cv.addEventListener('pointerup',e=>{const r=cv.getBoundingClientRect();if(!moved){const h=hit(e.clientX-r.left,e.clientY-r.top);if(h){h.type==='s'?openSite(h.i):openWatch(h.i)}}drag=null});
+ const h=pick?null:hit(mx,my),tip=$('tip');if(!h){tip.hidden=true;return}tip.hidden=false;tip.style.left=Math.min(e.clientX+12,innerWidth-290)+'px';tip.style.top=e.clientY+12+'px';
+ if(h.type==='s'){const s=D.sites[h.i];tip.textContent=`#${s.rank} ${s.nb} · ${s.n_recent} reports since 2022`}
+ else if(h.type==='w'){const w=D.watch[h.i];tip.textContent=`Watch: ${w.nb} · no reports in 3 yrs · ${w.p}% est. chance of first report`}
+ else{const {R,caseOf}=buildCases(),x=R[h.i],c=caseOf[h.i];tip.textContent=`${x.sample?'Sample report · ':'Your report · '}${[x.color,x.vtype].filter(Boolean).join(' ')||'Vehicle not noted'} · ${when(x)}${c?` · Case ${c.id}`:''}`}});
+cv.addEventListener('pointerup',e=>{const r=cv.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;
+ if(!moved){if(pick){pickLoc=unP(mx,my);setPick(false);const t=$('locText');if(t)t.textContent=`Spot on map: ${pickLoc.lat.toFixed(5)}, ${pickLoc.lon.toFixed(5)}`;const s=$('f-site');if(s)s.value='map';draw()}
+  else{const h=hit(mx,my);if(h){h.type==='s'?openSite(h.i):h.type==='w'?openWatch(h.i):openReport(h.i)}}}drag=null});
 cv.addEventListener('pointerleave',()=>$('tip').hidden=true);
 function hit(mx,my){let best=null,bd=1e9;hits.forEach(h=>{const d=Math.hypot(h.x-mx,h.y-my);if(d<h.r&&d<bd){bd=d;best=h}});return best}
+function setPick(on){pick=on;cv.classList.toggle('picking',on);const h=$('hint');h.classList.toggle('on',on);h.textContent=on?'Click the map where the dumping happened':'Drag to pan · scroll or +/− to zoom · click a marker'}
 $('zin').onclick=()=>zoomAt(1.5,W/2,H/2);$('zout').onclick=()=>zoomAt(1/1.5,W/2,H/2);$('zreset').onclick=()=>{view={k:1,tx:0,ty:0};draw()};
-['cells','sites','watch'].forEach(k=>{const b=$('L-'+k);b.onclick=()=>{layers[k]=!layers[k];b.setAttribute('aria-pressed',layers[k]);draw()}});
+['cells','sites','watch','gap','cases'].forEach(k=>{const b=$('L-'+k);b.onclick=()=>{layers[k]=!layers[k];b.setAttribute('aria-pressed',layers[k]);draw()}});
 
 /* ---------- side panel ---------- */
 let tab='act';
 const trend=s=>{const d=s.last12-s.prev12;return d>0?`<span class="trend up">▲ ${d}</span>`:d<0?`<span class="trend down">▼ ${-d}</span>`:`<span class="trend">–</span>`};
+const noEnf=i=>D.enf&&D.enf.sites[i]&&(D.enf.sites[i].summons+D.enf.sites[i].arrest===0);
 function list(){
- sel=null;draw();
+ sel=null;setPick(false);draw();
  if(tab==='act'){$('pane').innerHTML=`<p class="lede">The 40 blocks most likely to be dumped on next, ranked by the model. Arrows compare the last 12 months with the 12 before.</p>`+
-  D.sites.map((s,i)=>`<button class="row" data-i="${i}"><span class="rk">${s.rank}</span><span class="rt"><b>${s.nb} · ${clean(s.addrs[0]?s.addrs[0][0]:'')}</b><span>Ward ${s.ward} · ${s.n_recent} reports since 2022 · ${s.actions.map(a=>a[0]).join(', ')}</span></span>${trend(s)}</button>`).join('');
+  D.sites.map((s,i)=>`<button class="row" data-i="${i}"><span class="rk">${s.rank}</span><span class="rt"><b>${s.nb} · ${clean(s.addrs[0]?s.addrs[0][0]:'')}</b><span>Ward ${s.ward} · ${s.n_recent} reports since 2022 · ${s.actions.map(a=>a[0]).join(', ')}${noEnf(i)?' · no citations since 2022':''}</span></span>${trend(s)}</button>`).join('');
   $('pane').querySelectorAll('.row').forEach(r=>r.onclick=()=>openSite(+r.dataset.i))}
  else if(tab==='watch'){$('pane').innerHTML=`<p class="lede">Blocks with no dumping reports for three years, but surrounded by the conditions that came before dumping elsewhere: city-owned (LRA) land and vacant buildings. Act before they become hotspots.</p>`+
   D.watch.map((w,i)=>`<button class="row" data-i="${i}"><span class="rk" style="color:var(--watch)">◆</span><span class="rt"><b>${w.nb}</b><span>${w.lra} LRA parcels · ${w.vac_bldg} vacant buildings · ${w.vac_lot} vacant lots nearby</span></span><span class="pill W">${w.p}%</span></button>`).join('');
   $('pane').querySelectorAll('.row').forEach(r=>r.onclick=()=>openWatch(+r.dataset.i))}
+ else if(tab==='cases')casesList();
  else how();
 }
 function bars(vals,labels,color,h=70){const W2=360,mx=Math.max(1,...vals),bw=W2/vals.length;
@@ -187,21 +275,22 @@ function bars(vals,labels,color,h=70){const W2=360,mx=Math.max(1,...vals),bw=W2/
 function openSite(i){
  const s=D.sites[i];sel={type:'s',i};tabSet('act',false);focus(s.lon,s.lat,Math.max(view.k,4));
  const yrs=[];for(let y=2018;y<=2026;y++)yrs.push(s.years[y]||0);
- const vb=s.vb_list.filter(v=>v[1]>0);
- const mix=Object.entries(s.mix);
+ const vb=s.vb_list.filter(v=>v[1]>0),mix=Object.entries(s.mix),e=D.enf?D.enf.sites[i]:null;
  $('pane').innerHTML=`<div class="file">
   <button class="back" id="back">← All sites</button>
   <div><span class="pill ${s.tier[0]}">${s.tier} · #${s.rank}</span><h2>${s.nb}</h2><div class="meta">Ward ${s.ward} · ~200 m block around ${clean(s.addrs[0]?s.addrs[0][0]:'')} · last report ${new Date(s.last+'T12:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</div></div>
   <div class="facts"><div><b>${s.n_recent}</b><span>reports since 2022</span></div><div><b>${s.last12}</b><span>last 12 months (prior: ${s.prev12})</span></div><div><b>${s.med_close??'–'}</b><span>median days to close</span></div></div>
   <div><h3>Recommended action</h3><div class="act">${s.actions.map(a=>`<div><b>${a[0]}</b><p>${a[1]}</p></div>`).join('')}</div></div>
+  ${e?`<div><h3>Enforcement since 2022</h3><table><tr><td>Witnessed reports investigated</td><td class="n">${e.witnessed}</td></tr><tr><td>Summons issued</td><td class="n">${e.summons}</td></tr><tr><td>Arrests</td><td class="n">${e.arrest}</td></tr><tr><td>Warnings</td><td class="n">${e.warning}</td></tr><tr><td>Closed: not enough evidence</td><td class="n">${e.nofail}</td></tr></table>${e.summons+e.arrest===0?`<p class="note" style="margin-top:6px"><b>No summons or arrest at this block since 2022.</b> ${e.witnessed?'Witnesses reported dumping, but no case resulted.':'No one has reported seeing it happen; a camera is the way in.'}</p>`:''}</div>`:''}
   <div><h3>Reports per year</h3>${bars(yrs,yrs.map((_,k)=>"'"+String(18+k)),css('--t2'))}</div>
   <div><h3>Repeat addresses (since 2022)</h3><table>${s.addrs.map(a=>`<tr><td>${clean(a[0])}</td><td class="n">${a[1]}</td></tr>`).join('')}</table></div>
   ${s.w_n?`<div><h3>Witnessed dumping by weekday reported (${s.w_n})</h3>${bars(s.w_dow,['M','T','W','T','F','S','S'],css('--t3'),56)}<p class="note">Use these days to schedule patrols and to pull camera footage.</p></div>`:''}
   <div><h3>Report types</h3><table>${mix.map(([k,v])=>`<tr><td>${k}</td><td class="n">${v}</td></tr>`).join('')}</table></div>
   <div><h3>Conditions within ~300 m</h3><table><tr><td>City-owned (LRA) parcels</td><td class="n">${s.lra}</td></tr><tr><td>Vacant lots</td><td class="n">${s.vac_lot}</td></tr><tr><td>Registered vacant buildings</td><td class="n">${s.vac_bldg}</td></tr></table>
   ${vb.length?`<p class="note" style="margin-top:8px">Longest-vacant buildings nearby: ${vb.map(v=>`${clean(v[0])} (${v[1]} mo${v[2]?`, ${v[2]} major violations`:''})`).join('; ')}.</p>`:''}</div>
+  <button class="btn ghost" id="rep-here">Report a dumper at this site</button>
  </div>`;
- $('back').onclick=list;$('pane').scrollTop=0;
+ $('back').onclick=list;$('rep-here').onclick=()=>openForm(i);$('pane').scrollTop=0;
 }
 function openWatch(i){
  const w=D.watch[i];sel={type:'w',i};tabSet('watch',false);focus(w.lon,w.lat,Math.max(view.k,4));
@@ -212,8 +301,110 @@ function openWatch(i){
   <div><h3>Recommended action</h3><div class="act"><div><b>Prevent first</b><p>Mow and secure LRA frontage, board open vacant buildings, and add to the routine patrol loop before the first pile appears.</p></div></div></div>
  </div>`;$('back').onclick=list;$('pane').scrollTop=0;
 }
+
+/* ---------- cases tab ---------- */
+function casesList(){
+ const {R,cases,caseOf}=buildCases();
+ $('pane').innerHTML=`<p class="lede">One sighting rarely identifies a dumper. DumpWatch links witness reports from different sites that share a vehicle, plate fragment or pattern, and turns them into one case for investigators.</p>
+  <div class="bar"><button class="btn" id="new-rep">+ Report a dumper</button></div>
+  <p class="sec">Linked cases (${cases.length})</p>
+  ${cases.map(c=>{const d=describe(c,R);return `<button class="row" data-c="${c.id}"><span class="rk"><span class="dot" style="background:var(${c.color})"></span></span><span class="rt"><b>Case ${c.id} · ${esc(d.v)}</b><span>${c.idx.length} reports · ${new Set(c.idx.map(i=>nearestSite(R[i]).s.nb)).size} neighborhoods · ${esc(d.marks.slice(0,2).join(', ').toLowerCase())}</span></span><span class="pill ${c.idx.some(i=>!R[i].sample)?'Y':'S'}">${c.idx.some(i=>!R[i].sample)?'Includes yours':'Sample'}</span></button>`}).join('')||'<p class="lede">No linked cases yet.</p>'}
+  <p class="sec">All witness reports (${R.length})</p>
+  ${R.map((r,i)=>{const c=caseOf[i];return `<button class="row" data-r="${i}"><span class="rk"><span class="dot" style="background:${c?`var(${c.color})`:'var(--muted)'}"></span></span><span class="rt"><b>${esc([r.color,r.make,r.vtype].filter(Boolean).join(' ')||'Vehicle not noted')}</b><span>${when(r)} · near ${esc(nearestSite(r).s.nb)}${c?` · Case ${c.id}`:' · not linked'}</span></span><span class="pill ${r.sample?'S':'Y'}">${r.sample?'Sample':'Yours'}</span></button>`}).join('')}
+  <p class="lede" style="border:0">Sample reports are invented to show how linking works; they describe no real person or vehicle. Reports you add are kept in this browser only. In production they would go to the City's Environmental Investigations unit and be visible to staff only.</p>`;
+ $('new-rep').onclick=()=>openForm(null);
+ $('pane').querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>openCase(b.dataset.c));
+ $('pane').querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>openReport(+b.dataset.r));
+}
+function openCase(id){
+ const {R,cases}=buildCases(),c=cases.find(x=>x.id===id);if(!c)return casesList();
+ sel={type:'c',id};tabSet('cases',false);const d=describe(c,R);fit(d.rs);
+ const plates=[...new Set(d.rs.map(r=>normPlate(r.plate)).filter(Boolean))];
+ const days=[...new Set(d.rs.map(r=>new Date(r.when).toLocaleDateString('en-US',{weekday:'long'})))];
+ const hrs=d.rs.map(r=>new Date(r.when).getHours()),h0=Math.min(...hrs),h1=Math.max(...hrs)+1,hh=h=>new Date(2000,0,1,h).toLocaleTimeString('en-US',{hour:'numeric'});
+ const sites=[...new Map(d.rs.map(r=>{const n=nearestSite(r);return [n.s.rank,n.s]})).values()].sort((a,b)=>a.rank-b.rank);
+ const debris=[...new Set(d.rs.flatMap(r=>r.debris||[]))];
+ $('pane').innerHTML=`<div class="file"><button class="back" id="back">← All cases</button>
+  <div><span class="pill" style="color:var(${c.color})">Case ${c.id}${c.idx.every(i=>R[i].sample)?' · sample':''}</span><h2>${esc(d.v)}</h2><div class="meta">${esc(d.marks.join(' · ')||'No distinctive marks noted')}</div></div>
+  <div class="facts"><div><b>${c.idx.length}</b><span>linked reports</span></div><div><b>${sites.length}</b><span>top-40 sites nearby</span></div><div><b>${Math.round((Date.parse(d.rs.at(-1).when)-Date.parse(d.rs[0].when))/864e5)}</b><span>days from first to last</span></div></div>
+  <div><h3>What the reports add up to</h3><table>
+   <tr><td>Vehicle</td><td class="n" style="white-space:normal;text-align:right">${esc(d.v)}</td></tr>
+   <tr><td>Plate fragments seen</td><td class="n">${plates.length?esc(plates.join(' · ')):'none'}</td></tr>
+   <tr><td>Dumped</td><td class="n" style="white-space:normal;text-align:right">${esc(debris.join(', ').toLowerCase())}</td></tr>
+   <tr><td>Pattern</td><td class="n" style="white-space:normal;text-align:right">${esc(days.join(', '))} · ${hh(h0)}–${hh(h1)}</td></tr></table></div>
+  <div><h3>Why these were linked</h3>${c.links.map(l=>`<div class="link">${esc(when(R[l.a]))} ↔ ${esc(when(R[l.b]))} <span class="note">· score ${l.s.toFixed(1)}</span><div class="why">${l.why.map(w=>`<span>${esc(w)}</span>`).join('')}</div></div>`).join('')}</div>
+  <div><h3>Next steps for investigators</h3><div class="act">
+   <div><b>Camera</b><p>Place a visible camera at ${sites.map(s=>`#${s.rank} ${esc(s.nb)}`).join(', ')} on ${esc(days.join(' and '))}, ${hh(h0)}–${hh(h1)}.</p></div>
+   <div><b>Plate search</b><p>${plates.length?`Run the fragments ${esc(plates.join(' and '))} against ${esc(d.v.toLowerCase())} registrations.`:'No plate seen yet; ask witnesses near these sites for any characters they noticed.'}</p></div>
+   ${debris.includes('Construction debris')?`<div><b>Permits</b><p>Check open renovation and demolition permits within a few blocks of these sites for a contractor with a ${esc(d.v.toLowerCase())}.</p></div>`:''}
+   ${debris.includes('Tires')?`<div><b>Tire shops</b><p>Check tire shops and scrap-tire haulers near these sites for a ${esc(d.v.toLowerCase())}; tire disposal leaves paperwork.</p></div>`:''}
+  </div></div>
+  <div><h3>Reports in this case</h3>${d.rs.map((r,k)=>`<button class="row" data-r="${c.idx[k]}" style="padding-left:0;padding-right:0"><span class="rk"><span class="dot" style="background:var(${c.color})"></span></span><span class="rt"><b>${esc(when(r))}</b><span>${esc([r.color,r.make,r.vtype].filter(Boolean).join(' '))}${r.plate?` · plate ${esc(normPlate(r.plate))}`:''} · near ${esc(nearestSite(r).s.nb)}</span></span><span class="pill ${r.sample?'S':'Y'}">${r.sample?'Sample':'Yours'}</span></button>`).join('')}</div>
+ </div>`;
+ $('back').onclick=()=>{sel=null;tabSet('cases')};$('pane').querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>openReport(+b.dataset.r));$('pane').scrollTop=0;
+}
+function openReport(i){
+ const {R,caseOf}=buildCases(),r=R[i],c=caseOf[i];if(!r)return casesList();
+ sel={type:'r',i};tabSet('cases',false);focus(r.lon,r.lat,Math.max(view.k,5));const n=nearestSite(r);
+ $('pane').innerHTML=`<div class="file"><button class="back" id="back">← All cases</button>
+  <div><span class="pill ${r.sample?'S':'Y'}">${r.sample?'Sample report':'Your report'}</span><h2>${esc([r.color,r.vtype].filter(Boolean).join(' ')||'Vehicle not noted')}</h2><div class="meta">${esc(when(r))} · ${n.d<1?'at':'near'} #${n.s.rank} ${esc(n.s.nb)}</div></div>
+  ${r.photo?`<img class="thumb" src="${r.photo}" alt="Photo attached to this report">`:''}
+  <table><tr><td>Make</td><td class="n">${esc(r.make||'—')}</td></tr><tr><td>Plate (partial)</td><td class="n">${esc(normPlate(r.plate)||'—')}</td></tr><tr><td>Marks</td><td class="n" style="white-space:normal;text-align:right">${esc((r.marks||[]).join(', ')||'—')}</td></tr><tr><td>Dumped</td><td class="n" style="white-space:normal;text-align:right">${esc((r.debris||[]).join(', ')||'—')}</td></tr><tr><td>Direction of travel</td><td class="n">${esc(r.dir||'—')}</td></tr></table>
+  ${r.note?`<p class="note" style="font-size:13px">“${esc(r.note)}”</p>`:''}
+  ${c?`<button class="btn" id="go-case">Open Case ${c.id} (${c.idx.length} linked reports)</button>`:'<p class="note">Not linked to any other report yet. It will join a case automatically when a matching sighting comes in.</p>'}
+  ${r.sample?'':'<button class="btn ghost" id="del-rep">Delete this report</button>'}
+ </div>`;
+ $('back').onclick=()=>{sel=null;tabSet('cases')};if(c)$('go-case').onclick=()=>openCase(c.id);
+ if(!r.sample)$('del-rep').onclick=()=>{mine=mine.filter(x=>x.id!==r.id);saveMine();sel=null;tabSet('cases')};$('pane').scrollTop=0;
+}
+let photo=null;
+function openForm(siteIdx){
+ tabSet('cases',false);sel=null;pickLoc=null;photo=null;
+ const opts=D.sites.map((s,i)=>`<option value="${i}"${i===siteIdx?' selected':''}>#${s.rank} ${esc(s.nb)} · ${esc(clean(s.addrs[0]?s.addrs[0][0]:''))}</option>`).join('');
+ const now=new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,16);
+ const sel1=(id,arr,ph)=>`<select id="${id}"><option value="">${ph}</option>${arr.map(v=>`<option>${v}</option>`).join('')}</select>`;
+ const ck=(name,arr)=>`<div class="checks">${arr.map((v,k)=>`<label><input type="checkbox" name="${name}" value="${v}" id="${name}-${k}"><span>${v}</span></label>`).join('')}</div>`;
+ $('pane').innerHTML=`<form class="form" id="rep-form" novalidate>
+  <button class="back" type="button" id="back">← Cases</button>
+  <div><h2 style="font:700 28px/1 var(--display);margin:0">Report a dumper</h2><p class="note" style="margin:4px 0 0">Every detail helps link this to other sightings. Leave out anything you did not see.</p></div>
+  <p class="warn"><b>Stay safe.</b> Don't approach or confront anyone. Report from a distance. If someone is in danger, call 911.</p>
+  <div class="fld"><label for="f-site">Where</label><select id="f-site"><option value="">Choose a site…</option>${opts}<option value="map">Somewhere else: pick on the map</option></select><span class="note" id="locText"></span></div>
+  <div class="fld"><label for="f-when">When</label><input type="datetime-local" id="f-when" value="${now}"></div>
+  <div class="two"><div class="fld"><label for="f-vtype">Vehicle</label>${sel1('f-vtype',VTYPES,'Type…')}</div><div class="fld"><label for="f-color">Color</label>${sel1('f-color',COLORS,'Color…')}</div></div>
+  <div class="two"><div class="fld"><label for="f-make">Make (if known)</label><input type="text" id="f-make" placeholder="e.g. Ford" autocomplete="off"></div><div class="fld"><label for="f-plate">Plate (partial is fine)</label><input type="text" id="f-plate" placeholder="e.g. 7KD or ?7K?" autocomplete="off"></div></div>
+  <div class="fld"><span class="lbl">Distinctive marks</span>${ck('f-marks',MARKS)}</div>
+  <div class="fld"><span class="lbl">What was dumped</span>${ck('f-debris',DEBRIS)}</div>
+  <div class="two"><div class="fld"><label for="f-dir">Drove off heading</label>${sel1('f-dir',DIRS.slice(1),'Unknown')}</div><div class="fld"><label for="f-photo">Photo</label><input type="file" id="f-photo" accept="image/*"></div></div>
+  <img id="f-thumb" class="thumb" alt="Preview of the attached photo" hidden>
+  <div class="fld"><label for="f-note">Anything else</label><textarea id="f-note" placeholder="What you saw, how many people, how long it took"></textarea></div>
+  <p class="err" id="f-err" hidden></p>
+  <button class="btn" type="submit">Submit report</button>
+  <p class="note">Prototype: your report stays in this browser. In production it would go to the City's Environmental Investigations unit.</p>
+ </form>`;
+ $('back').onclick=()=>tabSet('cases');
+ const upd=()=>{const v=$('f-site').value;if(v==='map'){setPick(true);$('locText').textContent=pickLoc?`Spot on map: ${pickLoc.lat.toFixed(5)}, ${pickLoc.lon.toFixed(5)}`:'Now click the map where it happened.'}
+  else{setPick(false);pickLoc=null;$('locText').textContent='';if(v!==''){const s=D.sites[+v];focus(s.lon,s.lat,Math.max(view.k,4))}else draw()}};
+ $('f-site').onchange=upd;if(siteIdx!==null)upd();
+ $('f-photo').onchange=e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{photo=rd.result;$('f-thumb').src=photo;$('f-thumb').hidden=false};rd.readAsDataURL(f)};
+ $('rep-form').onsubmit=e=>{e.preventDefault();const v=$('f-site').value,err=$('f-err');
+  let loc=null;if(v==='map')loc=pickLoc;else if(v!==''){const s=D.sites[+v];loc={lat:s.lat+(Math.random()-.5)*.0006,lon:s.lon+(Math.random()-.5)*.0006}}
+  const when=$('f-when').value,vt=$('f-vtype').value,co=$('f-color').value,pl=$('f-plate').value.trim(),mk=$('f-make').value.trim();
+  const marks=[...document.querySelectorAll('input[name="f-marks"]:checked')].map(x=>x.value),debris=[...document.querySelectorAll('input[name="f-debris"]:checked')].map(x=>x.value);
+  const miss=[];if(!loc)miss.push(v==='map'?'click the map to set the spot':'choose where it happened');if(!when)miss.push('add the date and time');if(!vt&&!co&&!pl&&!marks.length)miss.push('describe the vehicle (type, color, plate or a mark)');
+  if(miss.length){err.textContent='To submit, '+miss.join(', ')+'.';err.hidden=false;return}
+  const r={id:'U'+Date.now(),lat:loc.lat,lon:loc.lon,when,vtype:vt,color:co,make:mk,plate:pl,marks,debris,dir:$('f-dir').value||'Unknown',note:$('f-note').value.trim(),photo};
+  mine.push(r);saveMine();setPick(false);pickLoc=null;
+  const {R,caseOf}=buildCases(),i=R.findIndex(x=>x.id===r.id),c=caseOf[i];draw();
+  $('pane').innerHTML=`<div class="file"><div><span class="pill Y">Report saved</span><h2>${c?`Linked to Case ${c.id}`:'No match yet'}</h2>
+   <p class="note" style="font-size:14px">${c?`Your sighting matches ${c.idx.length-1} other report${c.idx.length>2?'s':''}. Together they give investigators more than any one report could.`:'It is saved and will join a case automatically when a matching sighting is reported.'}</p></div>
+   ${c?`<button class="btn" id="go-case">Open Case ${c.id}</button>`:''}<button class="btn ghost" id="go-list">Back to cases</button></div>`;
+  if(c)$('go-case').onclick=()=>openCase(c.id);$('go-list').onclick=()=>tabSet('cases');};
+ $('pane').scrollTop=0;
+}
+
+/* ---------- does it work ---------- */
 function how(){
- const r=(k,i)=>Math.round(V[k][i]);
+ const r=(k,i)=>Math.round(V[k][i]);const o=E?E.outcomes:{};const S=D.speed;
  $('pane').innerHTML=`<div class="how">
   <p><b>The test.</b> We trained the model on dumping reports through 2025, then asked it to rank every ~200 m block in the city for 2026, without showing it any 2026 data. Then we checked the ranking against the ${fmt(3008)} reports actually filed from January to October 2026.</p>
   <div><h3>Share of 2026 reports caught by the flagged blocks</h3><table class="vt">
@@ -221,14 +412,20 @@ function how(){
    <tr><td><b>DumpWatch model</b></td><td class="n">${r('model',0)}%</td><td class="n"><b>${r('model',1)}%</b></td><td class="n">${r('model',2)}%</td></tr>
    <tr><td>Where it happened last year</td><td class="n">${r('last year only',0)}%</td><td class="n">${r('last year only',1)}%</td><td class="n">${r('last year only',2)}%</td></tr>
    <tr><td>Random blocks</td><td class="n">1%</td><td class="n">5%</td><td class="n">10%</td></tr></table></div>
-  <p><b>The watch list.</b> Separately, among blocks with no reports in 2023–2025, the ones scored highest for nearby LRA land and vacant buildings got a first report in 2026 at about twice the rate of other quiet blocks (29% vs 15% for the top fifth).</p>
+  <p><b>The watch list.</b> Among blocks with no reports in 2023–2025, the ones scored highest for nearby LRA land and vacant buildings got a first report in 2026 at about twice the rate of other quiet blocks (29% vs 15% for the top fifth).</p>
+  ${E?`<div><h3>Why catching dumpers is hard</h3><p style="margin-bottom:8px">When someone witnesses dumping, the City's Environmental Investigations unit investigates. Of ${fmt(E.decided)} witnessed reports with an outcome since 2022:</p><table>
+   <tr><td>Summons issued</td><td class="n">${fmt(o['Summons issued']||0)}</td></tr><tr><td>Arrest</td><td class="n">${fmt(o['Arrest']||0)}</td></tr><tr><td>Warning</td><td class="n">${fmt(o['Warning']||0)}</td></tr>
+   <tr><td><b>Closed: not enough evidence</b></td><td class="n"><b>${fmt(o['Closed: not enough evidence']||0)}</b></td></tr><tr><td>No violation found</td><td class="n">${fmt(o['No violation found']||0)}</td></tr></table>
+   <p class="note" style="margin-top:6px">${Math.round(E.enforced_share_of_decided)}% ended in a summons or arrest; ${Math.round(E.evidence_fail_share_of_decided)}% were closed for lack of evidence, including ${E.evidence_fail_breakdown['Incorrect information provided']||0} where the caller's information was wrong. The Cases tab exists to close that gap.</p></div>
+  <p><b>The enforcement gap.</b> ${E.high_risk_no_enforcement} of ${E.high_risk_cells} Critical and High blocks have had no summons or arrest since 2022. In ${E.gap_witnessed_but_no_case} of them someone witnessed dumping but no case resulted; in ${E.gap_never_witnessed}, no one has ever reported seeing it happen. Turn on <i>No enforcement</i> on the map to see them.</p>`:''}
+  ${S?`<p><b>Does fast cleanup stop repeat dumping?</b> We tested it and the 311 data does not show it. After matching blocks by report type and activity, a new report followed within ${S.window_days} days of ${S.adjusted.fast}% of fast cleanups (0–3 days) and ${S.adjusted.slow}% of slow ones (over 14 days). A clean block likely makes new dumping easier to see and report. Answering this needs a controlled pilot, not more 311 data.</p>`:''}
   <p><b>What goes into the score.</b> Each block's dumping history over 1–5 years, its neighbors' history, the mix of report types, and nearby city-owned land, vacant lots and registered vacant buildings.</p>
-  <div><h3>Limits</h3><p class="note" style="font-size:13px">311 reports measure where dumping gets reported, not every dump. About 28% are logged by City staff, so patrolled areas are over-represented. Timestamps record the report, not the dump. The City appears to have changed how it codes vacant-lot and vacant-building debris after 2022. Police dumping reports are not in this data.</p></div>
+  <div><h3>Limits</h3><p class="note" style="font-size:13px">311 reports measure where dumping gets reported, not every dump. About 28% are logged by City staff, so patrolled areas are over-represented. Timestamps record the report, not the dump. The City appears to have changed how it codes vacant-lot and vacant-building debris after 2017. Police reports filed outside 311 are not in this data. Case linking is a prototype run on sample reports.</p></div>
   <p class="note">Sources: City of St. Louis Open Data — CSB Service Requests (311), Assessor parcels, LRA inventory, vacant building registry, streets and neighborhood boundaries.</p>
  </div>`}
-function tabSet(t,render=true){tab=t;['act','watch','how'].forEach(k=>$('t-'+k).setAttribute('aria-selected',k===t));if(render)list()}
-['act','watch','how'].forEach(k=>$('t-'+k).onclick=()=>tabSet(k));
-window.addEventListener('resize',()=>{size();if(sel){const o=sel.type==='s'?D.sites[sel.i]:D.watch[sel.i];focus(o.lon,o.lat,view.k)}else{view={k:1,tx:0,ty:0};draw()}});
+function tabSet(t,render=true){tab=t;['act','cases','watch','how'].forEach(k=>$('t-'+k).setAttribute('aria-selected',k===t));if(render)list()}
+['act','cases','watch','how'].forEach(k=>$('t-'+k).onclick=()=>tabSet(k));
+window.addEventListener('resize',()=>{size();if(sel&&(sel.type==='s'||sel.type==='w')){const o=sel.type==='s'?D.sites[sel.i]:D.watch[sel.i];focus(o.lon,o.lat,view.k)}else{view={k:1,tx:0,ty:0};draw()}});
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change',draw);
 new MutationObserver(draw).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 size();list();

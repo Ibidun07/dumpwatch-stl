@@ -1,0 +1,1277 @@
+{
+ "summary": {
+  "witnessed": 3488,
+  "outcomes": {
+   "Closed: not enough evidence": 1067,
+   "Summons issued": 775,
+   "Arrest": 749,
+   "No outcome recorded": 425,
+   "No violation found": 188,
+   "Warning": 172,
+   "Camera requested": 112
+  },
+  "detail": {
+   "summons issued": 775,
+   "Cleared by arrest - Illegal Dumping": 579,
+   "(blank)": 425,
+   "Not enough evidence to lead to arrest": 369,
+   "No evidence to lead to an arrest": 338,
+   "no violation found": 188,
+   "no witness(es)": 185,
+   "Incorrect information provided": 159,
+   "Camera request": 112,
+   "Re-Instructional/ Warning Letter Sent": 86,
+   "Cleared by arrest - Container Violation": 79,
+   "Verbal Re-Instructional/ Warning Given": 65,
+   "cleared by arrest": 42,
+   "Cleared by arrest - Illegal Dumping & Container Violation": 39,
+   "instructional letter issued as a warning": 21,
+   "Witness(es) refuses to assist in prosecution": 12,
+   "Cleared by arrest - Accumulation of Rubbish": 10,
+   "Caller is not the witness": 4
+  },
+  "decided": 2951,
+  "enforced_share_of_decided": 51.6,
+  "evidence_fail_share_of_decided": 36.2,
+  "evidence_fail_breakdown": {
+   "Not enough evidence to lead to arrest": 369,
+   "No evidence to lead to an arrest": 338,
+   "no witness(es)": 185,
+   "Incorrect information provided": 159,
+   "Witness(es) refuses to assist in prosecution": 12,
+   "Caller is not the witness": 4
+  },
+  "by_year": [
+   {
+    "year": 2022,
+    "enforced": 444,
+    "evidence_fail": 272,
+    "decided": 803
+   },
+   {
+    "year": 2023,
+    "enforced": 331,
+    "evidence_fail": 226,
+    "decided": 634
+   },
+   {
+    "year": 2024,
+    "enforced": 284,
+    "evidence_fail": 249,
+    "decided": 616
+   },
+   {
+    "year": 2025,
+    "enforced": 262,
+    "evidence_fail": 160,
+    "decided": 499
+   },
+   {
+    "year": 2026,
+    "enforced": 203,
+    "evidence_fail": 160,
+    "decided": 399
+   }
+  ],
+  "high_risk_cells": 199,
+  "high_risk_no_enforcement": 110,
+  "high_risk_reports": 7153,
+  "high_risk_reports_in_no_enforcement_cells": 3571,
+  "all_cells_enforcement_share_in_high_risk": 39.2,
+  "all_reports_share_in_high_risk": 22.8,
+  "sites_with_no_enforcement": 16,
+  "gap_cells": [
+   {
+    "lat": 38.71981,
+    "lon": -90.23021,
+    "reports": 90,
+    "witnessed": 4,
+    "nofail": 3,
+    "tier": "High",
+    "nb": "74"
+   },
+   {
+    "lat": 38.68128,
+    "lon": -90.23721,
+    "reports": 73,
+    "witnessed": 6,
+    "nofail": 3,
+    "tier": "Critical",
+    "nb": "69"
+   },
+   {
+    "lat": 38.67585,
+    "lon": -90.2258,
+    "reports": 71,
+    "witnessed": 2,
+    "nofail": 0,
+    "tier": "High",
+    "nb": "68"
+   },
+   {
+    "lat": 38.65651,
+    "lon": -90.26392,
+    "reports": 59,
+    "witnessed": 3,
+    "nofail": 1,
+    "tier": "High",
+    "nb": "51"
+   },
+   {
+    "lat": 38.65679,
+    "lon": -90.26136,
+    "reports": 58,
+    "witnessed": 2,
+    "nofail": 1,
+    "tier": "Critical",
+    "nb": "53"
+   },
+   {
+    "lat": 38.69885,
+    "lon": -90.248,
+    "reports": 57,
+    "witnessed": 1,
+    "nofail": 1,
+    "tier": "Critical",
+    "nb": "72"
+   },
+   {
+    "lat": 38.70418,
+    "lon": -90.25487,
+    "reports": 55,
+    "witnessed": 1,
+    "nofail": 0,
+    "tier": "Critical",
+    "nb": "76"
+   },
+   {
+    "lat": 38.71114,
+    "lon": -90.25676,
+    "reports": 54,
+    "witnessed": 2,
+    "nofail": 0,
+    "tier": "Critical",
+    "nb": "76"
+   },
+   {
+    "lat": 38.67097,
+    "lon": -90.22324,
+    "reports": 53,
+    "witnessed": 0,
+    "nofail": 0,
+    "tier": "High",
+    "nb": "68"
+   },
+   {
+    "lat": 38.71642,
+    "lon": -90.22973,
+    "reports": 51,
+    "witnessed": 4,
+    "nofail": 2,
+    "tier": "Critical",
+    "nb": "74"
+   },
+   {
+    "lat": 38.66029,
+    "lon": -90.26593,
+    "reports": 49,
+    "witnessed": 1,
+    "nofail": 1,
+    "tier": "Critical",
+    "nb": "51"
+   },
+   {
+    "lat": 38.70073,
+    "lon": -90.24806,
+    "reports": 48,
+    "witnessed": 1,
+    "nofail": 1,
+    "tier": "Critical",
+    "nb": "72"
+   },
+   {
+    "lat": 38.69369,
+    "lon": -90.25677,
+    "reports": 47,
+    "witnessed": 1,
+    "nofail": 0,
+    "tier": "Critical",
+    "nb": "72"
+   },
+   {
+    "lat": 38.69523,
+    "lon": -90.25493,
+    "reports": 46,
+    "witnessed": 0,
+    "nofail": 0,
+    "tier": "High",
+    "nb": "72"
+   },
+   {
+    "lat": 38.71625,
+    "lon": -90.2286,
+    "reports": 46,
+    "witnessed": 4,
+    "nofail": 2,
+    "tier": "High",
+    "nb": "74"
+   }
+  ],
+  "gap_witnessed_but_no_case": 80,
+  "gap_never_witnessed": 30
+ },
+ "sites": [
+  {
+   "witnessed": 32,
+   "summons": 19,
+   "arrest": 0,
+   "warning": 4,
+   "nofail": 6
+  },
+  {
+   "witnessed": 3,
+   "summons": 1,
+   "arrest": 0,
+   "warning": 0,
+   "nofail": 2
+  },
+  {
+   "witnessed": 41,
+   "summons": 0,
+   "arrest": 40,
+   "warning": 0,
+   "nofail": 0
+  },
+  {
+   "witnessed": 13,
+   "summons": 3,
+   "arrest": 1,
+   "warning": 0,
+   "nofail": 6
+  },
+  {
+   "witnessed": 57,
+   "summons": 23,
+   "arrest": 31,
+   "warning": 0,
+   "nofail": 0
+  },
+  {
+   "witnessed": 19,
+   "summons": 8,
+   "arrest": 0,
+   "warning": 3,
+   "nofail": 6
+  },
+  {
+   "witnessed": 1,
+   "summons": 0,
+   "arrest": 0,
+   "warning": 0,
+   "nofail": 1
+  },
+  {
+   "witnessed": 6,
+   "summons": 0,
+   "arrest": 5,
+   "warning": 0,
+   "nofail": 0
+  },
+  {
+   "witnessed": 6,
+   "summons": 0,
+   "arrest": 0,
+   "warning": 0,
+   "nofail": 3
+  },
+  {
+   "witnessed": 13,
+   "summons": 5,
+   "arrest": 1,
+   "warning": 0,
+   "nofail": 7
+  },
+  {
+   "witnessed": 1,
+   "summons": 0,
+   "arrest": 0,
+   "warning": 0,
+   "nofail": 1
+  },
+  {
+   "witnessed": 2,
+   "summons": 0,
+   "arrest": 0,
+   "warning": 0,
+   "nofail": 0
+  },
+  {
+   "witnessed": 62,
+   "summons": 0,
+   "arrest": 61,
+   "warning": 0,
+   "nofail": 1
+  },
+  {
+   "witnessed": 5,
+   "summons": 1,
+   "arrest": 0,
+   "warning": 0,
+   "nofail": 3
+  },
+  {
+   "witnessed": 1,
+   "summons": 0,
+   "arrest": 0,
+   "warning": 1,
+   "nofail": 0
+  },
+  {
+   "witnessed": 12,
+   "summons": 7,
+   "arrest": 0,
+   "warning": 1,
+   "nofail": 3
+  },
+  {
+   "witnessed": 11,
+   "summons": 10,
+   "arrest": 0,
+   "warning": 0,
+   "nofail": 1
+  },
+  {
+   "witnessed": 1,
+   "summons": 0,
+   "arrest": 0,
+   "warning": 0,
+   "nofail": 0
+  },
+  {
+   "witnessed": 27,
+   "summons": 21,
+   "arrest": 0,
+   "warning": 0,
+   "nofail": 0
+  },
+  {
+   "witnessed": 5,
+   "summons": 1,
+   "arrest": 0,
+   "warning": 0,
+   "nofail": 3
+  },
+  {
+   "witnessed": 2,
+   "summons": 0,
+   "arrest": 0,
+   "warning": 0,
+   "nofail": 1
+  },
+  {
+   "witnessed": 17,
+   "summons": 4,
+   "arrest": 3,
+   "warning": 3,
+   "nofail": 7
+  },
+  {
+   "witnessed": 1,
+   "summons": 0,
+   "arrest": 0,
+   "warning": 0,
+   "nofail": 0
+  },
+  {
+   "witnessed": 3,
+   "summons": 0,
+   "arrest": 0,
+   "warning": 0,
+   "nofail": 2
+  },
+  {
+   "witnessed": 1,
+   "summons": 1,
+   "arrest": 0,
+   "warning": 0,
+   "nofail": 0
+  },
+  {
+   "witnessed": 3,
+   "summons": 1,
+   "arrest": 0,
+   "warning": 0,
+   "nofail": 1
+  },
+  {
+   "witnessed": 2,
+   "summons": 1,
+   "arrest": 0,
+   "warning": 0,
+   "nofail": 0
+  },
+  {
+   "witnessed": 0,
+   "summons": 0,
+   "arrest": 0,
+   "warning": 0,
+   "nofail": 0
+  },
+  {
+   "witnessed": 4,
+   "summons": 0,
+   "arrest": 0,
+   "warning": 0,
+   "nofail": 2
+  },
+  {
+   "witnessed": 16,
+   "summons": 0,
+   "arrest": 15,
+   "warning": 0,
+   "nofail": 1
+  },
+  {
+   "witnessed": 0,
+   "summons": 0,
+   "arrest": 0,
+   "warning": 0,
+   "nofail": 0
+  },
+  {
+   "witnessed": 0,
+   "summons": 0,
+   "arrest": 0,
+   "warning": 0,
+   "nofail": 0
+  },
+  {
+   "witnessed": 24,
+   "summons": 2,
+   "arrest": 11,
+   "warning": 1,
+   "nofail": 3
+  },
+  {
+   "witnessed": 5,
+   "summons": 1,
+   "arrest": 4,
+   "warning": 0,
+   "nofail": 0
+  },
+  {
+   "witnessed": 7,
+   "summons": 0,
+   "arrest": 2,
+   "warning": 1,
+   "nofail": 2
+  },
+  {
+   "witnessed": 1,
+   "summons": 0,
+   "arrest": 0,
+   "warning": 0,
+   "nofail": 1
+  },
+  {
+   "witnessed": 15,
+   "summons": 4,
+   "arrest": 7,
+   "warning": 0,
+   "nofail": 2
+  },
+  {
+   "witnessed": 2,
+   "summons": 0,
+   "arrest": 0,
+   "warning": 0,
+   "nofail": 2
+  },
+  {
+   "witnessed": 0,
+   "summons": 0,
+   "arrest": 0,
+   "warning": 0,
+   "nofail": 0
+  },
+  {
+   "witnessed": 2,
+   "summons": 1,
+   "arrest": 0,
+   "warning": 0,
+   "nofail": 1
+  }
+ ],
+ "gap_all": [
+  [
+   38.67075,
+   -90.28652,
+   22,
+   2,
+   2
+  ],
+  [
+   38.65657,
+   -90.26828,
+   30,
+   0,
+   0
+  ],
+  [
+   38.6585,
+   -90.26842,
+   20,
+   1,
+   0
+  ],
+  [
+   38.66062,
+   -90.2683,
+   20,
+   0,
+   0
+  ],
+  [
+   38.66211,
+   -90.26834,
+   30,
+   0,
+   0
+  ],
+  [
+   38.65307,
+   -90.26595,
+   29,
+   0,
+   0
+  ],
+  [
+   38.65674,
+   -90.2663,
+   24,
+   0,
+   0
+  ],
+  [
+   38.65868,
+   -90.2666,
+   18,
+   0,
+   0
+  ],
+  [
+   38.66029,
+   -90.26593,
+   49,
+   1,
+   1
+  ],
+  [
+   38.66218,
+   -90.26612,
+   27,
+   0,
+   0
+  ],
+  [
+   38.66389,
+   -90.26628,
+   42,
+   1,
+   0
+  ],
+  [
+   38.6551,
+   -90.26372,
+   36,
+   4,
+   2
+  ],
+  [
+   38.65651,
+   -90.26392,
+   59,
+   3,
+   1
+  ],
+  [
+   38.65855,
+   -90.26353,
+   32,
+   3,
+   2
+  ],
+  [
+   38.66209,
+   -90.26394,
+   40,
+   3,
+   2
+  ],
+  [
+   38.7025,
+   -90.2633,
+   43,
+   6,
+   5
+  ],
+  [
+   38.65679,
+   -90.26136,
+   58,
+   2,
+   1
+  ],
+  [
+   38.65312,
+   -90.25936,
+   20,
+   0,
+   0
+  ],
+  [
+   38.65468,
+   -90.25904,
+   22,
+   0,
+   0
+  ],
+  [
+   38.65679,
+   -90.2596,
+   27,
+   1,
+   0
+  ],
+  [
+   38.65857,
+   -90.2595,
+   26,
+   1,
+   1
+  ],
+  [
+   38.65499,
+   -90.25697,
+   22,
+   1,
+   1
+  ],
+  [
+   38.69369,
+   -90.25677,
+   47,
+   1,
+   0
+  ],
+  [
+   38.70393,
+   -90.25681,
+   24,
+   0,
+   0
+  ],
+  [
+   38.70765,
+   -90.2571,
+   32,
+   0,
+   0
+  ],
+  [
+   38.71114,
+   -90.25676,
+   54,
+   2,
+   0
+  ],
+  [
+   38.65869,
+   -90.25524,
+   28,
+   0,
+   0
+  ],
+  [
+   38.69178,
+   -90.25497,
+   32,
+   1,
+   1
+  ],
+  [
+   38.6937,
+   -90.25446,
+   27,
+   0,
+   0
+  ],
+  [
+   38.69523,
+   -90.25493,
+   46,
+   0,
+   0
+  ],
+  [
+   38.70418,
+   -90.25487,
+   55,
+   1,
+   0
+  ],
+  [
+   38.66588,
+   -90.25291,
+   22,
+   1,
+   1
+  ],
+  [
+   38.69167,
+   -90.25238,
+   40,
+   1,
+   0
+  ],
+  [
+   38.70072,
+   -90.2527,
+   23,
+   0,
+   0
+  ],
+  [
+   38.69167,
+   -90.2507,
+   24,
+   0,
+   0
+  ],
+  [
+   38.69376,
+   -90.2502,
+   28,
+   0,
+   0
+  ],
+  [
+   38.69553,
+   -90.25046,
+   36,
+   2,
+   2
+  ],
+  [
+   38.70068,
+   -90.25019,
+   17,
+   0,
+   0
+  ],
+  [
+   38.70244,
+   -90.25027,
+   38,
+   2,
+   0
+  ],
+  [
+   38.70559,
+   -90.25044,
+   23,
+   2,
+   2
+  ],
+  [
+   38.69176,
+   -90.24828,
+   31,
+   1,
+   0
+  ],
+  [
+   38.69365,
+   -90.24817,
+   45,
+   2,
+   0
+  ],
+  [
+   38.69701,
+   -90.24797,
+   41,
+   0,
+   0
+  ],
+  [
+   38.69885,
+   -90.248,
+   57,
+   1,
+   1
+  ],
+  [
+   38.70073,
+   -90.24806,
+   48,
+   1,
+   1
+  ],
+  [
+   38.5672,
+   -90.246,
+   30,
+   0,
+   0
+  ],
+  [
+   38.68988,
+   -90.24592,
+   32,
+   0,
+   0
+  ],
+  [
+   38.6917,
+   -90.24609,
+   35,
+   1,
+   0
+  ],
+  [
+   38.69371,
+   -90.24587,
+   31,
+   0,
+   0
+  ],
+  [
+   38.69875,
+   -90.24572,
+   40,
+   1,
+   0
+  ],
+  [
+   38.66914,
+   -90.24373,
+   19,
+   1,
+   0
+  ],
+  [
+   38.67254,
+   -90.24376,
+   22,
+   3,
+   2
+  ],
+  [
+   38.67764,
+   -90.24325,
+   21,
+   2,
+   1
+  ],
+  [
+   38.6795,
+   -90.24376,
+   25,
+   1,
+   0
+  ],
+  [
+   38.69732,
+   -90.24311,
+   37,
+   1,
+   1
+  ],
+  [
+   38.59004,
+   -90.24107,
+   35,
+   3,
+   2
+  ],
+  [
+   38.59353,
+   -90.24128,
+   22,
+   4,
+   3
+  ],
+  [
+   38.6675,
+   -90.24145,
+   26,
+   1,
+   1
+  ],
+  [
+   38.67773,
+   -90.24148,
+   36,
+   7,
+   6
+  ],
+  [
+   38.67955,
+   -90.24175,
+   25,
+   0,
+   0
+  ],
+  [
+   38.68815,
+   -90.24167,
+   39,
+   1,
+   1
+  ],
+  [
+   38.58989,
+   -90.2389,
+   32,
+   2,
+   0
+  ],
+  [
+   38.66911,
+   -90.23902,
+   22,
+   1,
+   1
+  ],
+  [
+   38.67066,
+   -90.23935,
+   24,
+   2,
+   1
+  ],
+  [
+   38.67445,
+   -90.23878,
+   26,
+   1,
+   0
+  ],
+  [
+   38.67974,
+   -90.23906,
+   27,
+   2,
+   1
+  ],
+  [
+   38.58149,
+   -90.23687,
+   16,
+   3,
+   2
+  ],
+  [
+   38.67402,
+   -90.23704,
+   39,
+   0,
+   0
+  ],
+  [
+   38.67608,
+   -90.23667,
+   24,
+   0,
+   0
+  ],
+  [
+   38.67967,
+   -90.237,
+   32,
+   0,
+   0
+  ],
+  [
+   38.68128,
+   -90.23721,
+   73,
+   6,
+   3
+  ],
+  [
+   38.58299,
+   -90.2348,
+   42,
+   11,
+   9
+  ],
+  [
+   38.60257,
+   -90.23497,
+   28,
+   0,
+   0
+  ],
+  [
+   38.67572,
+   -90.23478,
+   43,
+   1,
+   0
+  ],
+  [
+   38.67949,
+   -90.23463,
+   27,
+   1,
+   0
+  ],
+  [
+   38.68121,
+   -90.23482,
+   39,
+   2,
+   1
+  ],
+  [
+   38.58146,
+   -90.23291,
+   13,
+   1,
+   1
+  ],
+  [
+   38.58837,
+   -90.23241,
+   22,
+   1,
+   1
+  ],
+  [
+   38.59021,
+   -90.23251,
+   38,
+   6,
+   4
+  ],
+  [
+   38.59356,
+   -90.23259,
+   29,
+   6,
+   3
+  ],
+  [
+   38.66923,
+   -90.23238,
+   40,
+   4,
+   2
+  ],
+  [
+   38.6706,
+   -90.2326,
+   25,
+   1,
+   1
+  ],
+  [
+   38.67279,
+   -90.23219,
+   25,
+   1,
+   1
+  ],
+  [
+   38.67426,
+   -90.23226,
+   20,
+   2,
+   1
+  ],
+  [
+   38.67597,
+   -90.2324,
+   32,
+   4,
+   3
+  ],
+  [
+   38.71449,
+   -90.23205,
+   30,
+   4,
+   1
+  ],
+  [
+   38.58864,
+   -90.23017,
+   24,
+   4,
+   1
+  ],
+  [
+   38.59195,
+   -90.2303,
+   29,
+   3,
+   1
+  ],
+  [
+   38.59573,
+   -90.23022,
+   22,
+   3,
+   2
+  ],
+  [
+   38.59734,
+   -90.23044,
+   31,
+   3,
+   2
+  ],
+  [
+   38.67049,
+   -90.23023,
+   45,
+   4,
+   2
+  ],
+  [
+   38.67251,
+   -90.23017,
+   21,
+   0,
+   0
+  ],
+  [
+   38.71642,
+   -90.22973,
+   51,
+   4,
+   2
+  ],
+  [
+   38.71981,
+   -90.23021,
+   90,
+   4,
+   3
+  ],
+  [
+   38.59882,
+   -90.22807,
+   14,
+   1,
+   1
+  ],
+  [
+   38.65501,
+   -90.22755,
+   32,
+   1,
+   1
+  ],
+  [
+   38.67087,
+   -90.22814,
+   37,
+   1,
+   0
+  ],
+  [
+   38.67777,
+   -90.228,
+   28,
+   2,
+   2
+  ],
+  [
+   38.71625,
+   -90.2286,
+   46,
+   4,
+   2
+  ],
+  [
+   38.72371,
+   -90.22753,
+   28,
+   3,
+   2
+  ],
+  [
+   38.58684,
+   -90.22543,
+   38,
+   4,
+   3
+  ],
+  [
+   38.66374,
+   -90.22561,
+   29,
+   3,
+   1
+  ],
+  [
+   38.67259,
+   -90.22506,
+   16,
+   0,
+   0
+  ],
+  [
+   38.67585,
+   -90.2258,
+   71,
+   2,
+   0
+  ],
+  [
+   38.67097,
+   -90.22324,
+   53,
+   0,
+   0
+  ],
+  [
+   38.67251,
+   -90.22363,
+   32,
+   1,
+   0
+  ],
+  [
+   38.67437,
+   -90.22302,
+   23,
+   1,
+   1
+  ],
+  [
+   38.67595,
+   -90.22319,
+   11,
+   1,
+   1
+  ],
+  [
+   38.6742,
+   -90.22112,
+   22,
+   1,
+   0
+  ],
+  [
+   38.66719,
+   -90.20327,
+   21,
+   1,
+   0
+  ]
+ ]
+}
