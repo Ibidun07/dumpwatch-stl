@@ -1,0 +1,148 @@
+<title>St. Louis Dumping Atlas</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: field-report sheet — headline numbers, map left / findings right, then timing and sites. */
+:root{
+ --bg:#f3f4f2; --panel:#ffffff; --ink:#1c2226; --muted:#5d686f; --rule:#d9ddda;
+ --heat0:#f2d98c; --heat1:#e49a3a; --heat2:#c4512a; --heat3:#7e1f24; --river:#b8cbd6;
+ --accent:#c4512a; --empty:#e4e7e4;
+ --display:"Barlow Condensed","Arial Narrow",sans-serif; --body:"Public Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15191c;--panel:#1d2327;--ink:#e6e9e7;--muted:#9aa5ab;--rule:#2f373c;--heat0:#8a6f2c;--heat1:#c9822f;--heat2:#e8673a;--heat3:#ffb08a;--river:#2b4250;--accent:#e8673a;--empty:#262d31;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#15191c;--panel:#1d2327;--ink:#e6e9e7;--muted:#9aa5ab;--rule:#2f373c;--heat0:#8a6f2c;--heat1:#c9822f;--heat2:#e8673a;--heat3:#ffb08a;--river:#2b4250;--accent:#e8673a;--empty:#262d31;color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.5}
+.wrap{max-width:1180px;margin:0 auto;padding-block:28px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:28px}
+.eyebrow{font:500 12px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font:700 clamp(34px,5vw,52px)/1 var(--display);margin:6px 0 10px;text-wrap:balance;letter-spacing:.005em}
+h2{font:600 24px/1.1 var(--display);margin:0 0 4px;letter-spacing:.01em}
+.lede{max-width:68ch;color:var(--muted);margin:0}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.stat{background:var(--panel);padding:16px 18px}
+.stat b{display:block;font:600 34px/1 var(--display);font-variant-numeric:tabular-nums}
+.stat span{font-size:13px;color:var(--muted)}
+.main{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:28px;align-items:start}
+@media (max-width:860px){.main{grid-template-columns:1fr}}
+.panel{background:var(--panel);border:1px solid var(--rule);padding:18px;min-width:0}
+.maphead{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;align-items:end;margin-bottom:10px}
+.toggle{display:inline-flex;border:1px solid var(--rule)}
+.toggle button{font:500 13px var(--body);background:transparent;color:var(--muted);border:0;padding:6px 12px;cursor:pointer}
+.toggle button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.toggle button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+canvas{display:block;width:100%;height:auto;max-width:100%}
+.legend{display:flex;gap:8px;align-items:center;font:12px var(--mono);color:var(--muted);margin-top:8px;flex-wrap:wrap}
+.ramp{height:10px;width:140px;background:linear-gradient(90deg,var(--heat0),var(--heat1),var(--heat2),var(--heat3))}
+.tip{position:fixed;pointer-events:none;background:var(--ink);color:var(--bg);font:12px/1.4 var(--mono);padding:6px 8px;z-index:5}
+.findings{display:grid;gap:18px}
+.finding h3{font:600 15px/1.3 var(--body);margin:0 0 4px}
+.finding p{margin:0;font-size:14px;color:var(--muted);max-width:60ch}
+.tag{display:inline-block;font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:2px 6px;border:1px solid var(--rule);color:var(--muted);margin-bottom:6px}
+.tag.warn{border-color:var(--accent);color:var(--accent)}
+.charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:28px}
+svg text{font-family:var(--mono);font-size:11px;fill:var(--muted)}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
+th{font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:left;border-bottom:1px solid var(--rule);padding:6px 8px}
+td{border-bottom:1px solid var(--rule);padding:8px;vertical-align:top}
+td.n{font:500 14px var(--mono)}
+.note{font-size:13px;color:var(--muted);max-width:75ch;margin:0}
+</style>
+<div class="wrap">
+ <header>
+  <div class="eyebrow">Problem Set 3 · Illegal dumping · First look at 311 data</div>
+  <h1>Where St. Louis gets dumped on</h1>
+  <p class="lede">Citizens' Service Bureau reports of witnessed dumping and debris in alleys, on vacant lots and around vacant buildings, 2013 through October 2026. Duplicate reports at the same address within a week are removed.</p>
+ </header>
+ <section class="stats" id="stats"></section>
+ <section class="main">
+  <div class="panel">
+   <div class="maphead">
+    <div><h2>Report density</h2><div class="eyebrow">~200 m grid cells · hover for counts</div></div>
+    <div class="toggle" role="group" aria-label="Time window">
+     <button id="w-all" aria-pressed="true">Since 2022</button><button id="w-12" aria-pressed="false">Last 12 months</button>
+    </div>
+   </div>
+   <canvas id="map" width="720" height="820" aria-label="Map of dumping report density across St. Louis"></canvas>
+   <div class="legend"><span>fewer</span><div class="ramp"></div><span>more reports</span><span>· outlined = statistically significant hotspot (Gi* &gt; 2.58)</span></div>
+  </div>
+  <div class="panel findings">
+   <h2>What the data says so far</h2>
+   <div class="finding"><span class="tag">Concentration</span><h3>Dumping is not everywhere. It clusters.</h3><p id="f-conc"></p></div>
+   <div class="finding"><span class="tag">North city</span><h3>The heaviest hotspots run through north St. Louis</h3><p>Baden, Walnut Park, Wells Goodfellow, the Greater Ville and Penrose dominate, along with Dutchtown and Gravois Park in the south. North Broadway along the riverfront shows up repeatedly, matching what reporters found there.</p></div>
+   <div class="finding"><span class="tag">Repeat sites</span><h3>A few hundred addresses keep coming back</h3><p>462 addresses have five or more reports since 2022. One block of Maffitt Ave has 42 witnessed-dumping reports across five years. These are the clearest candidates for cameras and enforcement.</p></div>
+   <div class="finding"><span class="tag">Timing</span><h3>Summer peaks, weekday reporting</h3><p>Reports climb from March and peak in July and August. Witnessed-dumping reports cluster Monday to Thursday during business hours, which mostly reflects when people call 311.</p></div>
+   <div class="finding"><span class="tag warn">Data caveat</span><h3>Report counts are not dump counts</h3><p id="f-cav"></p></div>
+  </div>
+ </section>
+ <section class="charts">
+  <div class="panel"><h2>Reports per year</h2><div class="eyebrow">by category · 2026 is partial</div><div id="c-year"></div></div>
+  <div class="panel"><h2>Seasonality</h2><div class="eyebrow">all categories since 2022, by month</div><div id="c-month"></div></div>
+  <div class="panel"><h2>Witnessed dumping by weekday</h2><div class="eyebrow">since 2022 · day reported</div><div id="c-dow"></div></div>
+ </section>
+ <section class="panel">
+  <h2>Chronic sites</h2><div class="eyebrow">addresses with the most reports since 2022</div>
+  <div class="tbl"><table><thead><tr><th>Address</th><th>Reports</th><th>Years active</th><th>Neighborhood</th><th>Report types</th></tr></thead><tbody id="addr"></tbody></table></div>
+ </section>
+ <p class="note">Source: City of St. Louis Open Data, CSB Service Requests (311), problem codes "Illegal dumpg report", "Debris-alley/street", "Debris-Vacant Lot" and "Debris-Vacant Bldg". Coordinates converted from Web Mercator. Hotspots use the Getis-Ord Gi* statistic on a 3×3 cell neighborhood.</p>
+</div>
+<div class="tip" id="tip" hidden></div>
+<script>
+const D=__DATA__;
+const S=D.stats,fmt=n=>n.toLocaleString('en-US');
+document.getElementById('stats').innerHTML=[
+ [fmt(S.total),'dumping reports since 2013'],[fmt(S.recent),'reports since Jan 2022'],
+ [S.hotshare+'%','of recent reports fall in hotspot cells'],['462','addresses with 5+ reports since 2022'],
+ [S.staff+'%','logged by City staff, not residents']].map(([b,s])=>`<div class="stat"><b>${b}</b><span>${s}</span></div>`).join('');
+document.getElementById('f-conc').textContent=`The busiest 5% of grid cells hold ${S.top5}% of all reports since 2022, and ${S.hotshare}% of reports fall inside statistically significant hotspots. That makes targeted prevention realistic.`;
+document.getElementById('f-cav').textContent=`About ${S.staff}% of recent reports were logged by City staff on patrol, so heavily patrolled areas look worse. Timestamps record when a dump was reported, not when it happened. The sharp drop in vacant-building and vacant-lot reports after 2022 likely reflects changes in how the City logs them, not less dumping.`;
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+// map
+const cv=document.getElementById('map'),ctx=cv.getContext('2d');
+const B={la0:38.532,la1:38.775,lo0:-90.322,lo1:-90.165},K=Math.cos(38.65*Math.PI/180);
+let mode='all',drawn=[];
+function proj(la,lo){const W=cv.width,H=cv.height,sx=W/((B.lo1-B.lo0)*K),sy=H/(B.la1-B.la0),s=Math.min(sx,sy);
+ const ox=(W-(B.lo1-B.lo0)*K*s)/2;return[ox+(lo-B.lo0)*K*s,(B.la1-la)*s]}
+function draw(){
+ const dpr=window.devicePixelRatio||1;cv.width=720*dpr;cv.height=820*dpr;ctx.setTransform(1,0,0,1,0,0);
+ ctx.fillStyle=css('--panel');ctx.fillRect(0,0,cv.width,cv.height);
+ const idx=mode==='all'?2:3,vals=D.cells.map(c=>c[idx]).filter(v=>v>0).sort((a,b)=>a-b);
+ const q=p=>vals[Math.floor(p*(vals.length-1))],t=[q(.5),q(.8),q(.95)];
+ const ramp=[css('--heat0'),css('--heat1'),css('--heat2'),css('--heat3')];
+ const cell=9.2*dpr;drawn=[];
+ D.cells.forEach(c=>{const v=c[idx];const[x,y]=proj(c[0],c[1]);
+  if(!v){ctx.fillStyle=css('--empty');ctx.fillRect(x-cell/2,y-cell/2,cell,cell);return}
+  const k=v<=t[0]?0:v<=t[1]?1:v<=t[2]?2:3;ctx.fillStyle=ramp[k];ctx.fillRect(x-cell/2,y-cell/2,cell,cell);
+  if(c[4]>2.58&&k>=2){ctx.strokeStyle=css('--ink');ctx.lineWidth=dpr;ctx.strokeRect(x-cell/2,y-cell/2,cell,cell)}
+  drawn.push([x/dpr,y/dpr,c])});
+ ctx.fillStyle=css('--muted');ctx.font=`${12*dpr}px "IBM Plex Mono",monospace`;
+ [['DOWNTOWN',38.627,-90.19],['FOREST PARK',38.637,-90.285],['BADEN',38.716,-90.232],['CARONDELET',38.553,-90.262],['MISSISSIPPI RIVER',38.67,-90.178]].forEach(([n,la,lo])=>{const[x,y]=proj(la,lo);ctx.fillText(n,x+6*dpr,y)});
+}
+cv.addEventListener('mousemove',e=>{const r=cv.getBoundingClientRect(),sc=720/r.width,mx=(e.clientX-r.left)*sc,my=(e.clientY-r.top)*sc;
+ let best=null,bd=60;drawn.forEach(d=>{const dd=(d[0]-mx)**2+(d[1]-my)**2;if(dd<bd){bd=dd;best=d}});const tip=document.getElementById('tip');
+ if(!best){tip.hidden=true;return}const c=best[2];tip.hidden=false;tip.style.left=e.clientX+12+'px';tip.style.top=e.clientY+12+'px';
+ tip.textContent=`${c[2]} reports since 2022 · ${c[3]} in last 12 mo${c[4]>2.58?' · hotspot':''}`});
+cv.addEventListener('mouseleave',()=>document.getElementById('tip').hidden=true);
+['w-all','w-12'].forEach(id=>document.getElementById(id).onclick=()=>{mode=id==='w-all'?'all':'12';
+ document.getElementById('w-all').setAttribute('aria-pressed',mode==='all');document.getElementById('w-12').setAttribute('aria-pressed',mode==='12');draw()});
+// charts
+function bars(el,labels,series,colors,h=200){
+ const W=360,pad={l:36,r:6,t:8,b:24},n=labels.length,bw=(W-pad.l-pad.r)/n;
+ const tot=labels.map((_,i)=>series.reduce((s,a)=>s+a[i],0)),mx=Math.max(...tot),step=Math.pow(10,Math.floor(Math.log10(mx))),top=Math.ceil(mx/step)*step;
+ const y=v=>pad.t+(h-pad.t-pad.b)*(1-v/top);let s=`<svg viewBox="0 0 ${W} ${h}" width="100%" role="img">`;
+ for(let g=0;g<=top;g+=top/4){s+=`<line x1="${pad.l}" x2="${W-pad.r}" y1="${y(g)}" y2="${y(g)}" stroke="${css('--rule')}"/><text x="${pad.l-4}" y="${y(g)+4}" text-anchor="end">${g>=1000?(g/1000)+'k':g}</text>`}
+ labels.forEach((l,i)=>{let acc=0;series.forEach((a,j)=>{const v=a[i];s+=`<rect x="${pad.l+i*bw+bw*.15}" width="${bw*.7}" y="${y(acc+v)}" height="${y(acc)-y(acc+v)}" fill="${colors[j]}"><title>${l}: ${fmt(v)}</title></rect>`;acc+=v});
+  if(n<=12||i%2===0)s+=`<text x="${pad.l+i*bw+bw/2}" y="${h-8}" text-anchor="middle">${l}</text>`});
+ document.getElementById(el).innerHTML=s+'</svg>';
+}
+function charts(){
+ const T=['Alley/street debris','Vacant lot debris','Vacant building debris','Witnessed dumping'],C=[css('--heat1'),css('--heat0'),css('--muted'),css('--heat3')];
+ bars('c-year',D.yearly.map(r=>"'"+String(r.year).slice(2)),T.map(t=>D.yearly.map(r=>r[t])),C);
+ document.getElementById('c-year').insertAdjacentHTML('beforeend','<div class="legend">'+T.map((t,i)=>`<span style="display:inline-flex;gap:4px;align-items:center"><i style="width:10px;height:10px;background:${C[i]};display:inline-block"></i>${t}</span>`).join('')+'</div>');
+ bars('c-month','JFMAMJJASOND'.split(''),[D.month],[css('--accent')]);
+ bars('c-dow',['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],[D.dow],[css('--heat3')]);
+}
+document.getElementById('addr').innerHTML=D.addr.map(a=>`<tr><td>${a[0]}</td><td class="n">${a[1]}</td><td class="n">${a[2]}</td><td>${a[3]}</td><td>${a[4]}</td></tr>`).join('');
+draw();charts();
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{draw();charts()});
+new MutationObserver(()=>{draw();charts()}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+</script>
