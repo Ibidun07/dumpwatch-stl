@@ -212,18 +212,20 @@ const AX=D.addr||{},AXK=Object.keys(AX);
 const STY=new Set(['ST','STREET','AVE','AV','AVENUE','BLVD','BOULEVARD','DR','DRIVE','PL','PLACE','RD','ROAD','LN','LANE','CT','COURT','WAY','SQ','SQUARE','PKY','PKWY','PARKWAY','TER','TERRACE','PLZ','PLAZA','CIR','CIRCLE','HWY']);
 const DIRW={N:'N',S:'S',E:'E',W:'W',NORTH:'N',SOUTH:'S',EAST:'E',WEST:'W'};
 const titleCase=x=>x.toLowerCase().replace(/\b\w/g,c=>c.toUpperCase());
-function geocode(raw){let s=String(raw||'').toUpperCase().split(',')[0].replace(/[^A-Z0-9 ]/g,' ').replace(/\s+/g,' ').trim();
+function geocode(raw){let s=String(raw||'').toUpperCase().split(',')[0].replace(/#/g,' APT ').replace(/^\s*(\d+)[A-Z]?\s*-\s*\d+[A-Z]?/,'$1').replace(/[^A-Z0-9 ]/g,' ').replace(/\s+/g,' ').trim();
+ s=s.replace(/\s+\d+(ST|ND|RD|TH)\s+(FL|FLR|FLOOR)\b.*$/,'').replace(/\s+(APT|APARTMENT|UNIT|STE|SUITE|FL|FLR|FLOOR|RM|ROOM|BLDG|BUILDING|LOT|SPC|SPACE)\b.*$/,'').trim();
  s=s.replace(/\s+\d{5}(\s+\d{4})?$/,'').replace(/\s+(MO|MISSOURI)$/,'').replace(/\s+(SAINT|ST)\s+LOUIS$/,'').trim();
- const m=s.match(/^(\d+)[A-Z]?\s+(.+)$/);if(!m)return null;const num=+m[1];let t=m[2].split(' '),dir='';
+ const m=s.match(/^(\d+)[A-Z]?\s+(.+)$/);if(!m)return {miss:'format'};const num=+m[1];let t=m[2].split(' '),dir='';
  if(t.length>1&&DIRW[t[0]]){dir=DIRW[t[0]];t=t.slice(1)}
  while(t.length>1&&STY.has(t.at(-1)))t=t.slice(0,-1);
  let name=t.join(' ');if(name==='MLK'||name==='MARTIN LUTHER KING')name='DR MARTIN LUTHER KING';
  let c=AXK.filter(k=>k.slice(k.indexOf('|')+1)===name);
  if(!c.length&&name.length>=4)c=AXK.filter(k=>k.slice(k.indexOf('|')+1).includes(name));
  if(dir){const c2=c.filter(k=>k.startsWith(dir+'|'));if(c2.length)c=c2}
+ if(!c.length)return {miss:'street'};
  const blk=Math.floor(num/100)*100;let best=null;
  c.forEach(k=>AX[k].forEach(([b,la,lo])=>{const d=Math.abs(b-blk);if(!best||d<best.d)best={d,b,la,lo,k}}));
- if(!best||best.d>300)return null;const dd=best.k.split('|')[0],nn=best.k.slice(best.k.indexOf('|')+1);
+ if(!best||best.d>300)return {miss:'number'};const dd=best.k.split('|')[0],nn=best.k.slice(best.k.indexOf('|')+1);
  return {lat:best.la,lon:best.lo,label:`${best.b} block of ${dd?dd+' ':''}${titleCase(nn)}`,exact:best.d===0}}
 
 /* ---------- map ---------- */
@@ -288,11 +290,13 @@ $('zin').onclick=()=>zoomAt(1.5,W/2,H/2);$('zout').onclick=()=>zoomAt(1/1.5,W/2,
 /* ---------- side panel ---------- */
 let tab='act';
 const trend=s=>{const d=s.last12-s.prev12;return d>0?`<span class="trend up">▲ ${d}</span>`:d<0?`<span class="trend down">▼ ${-d}</span>`:`<span class="trend">–</span>`};
+const SV=D.svc||null;
+const acts=i=>{const s=D.sites[i],v=SV&&SV.sites[i],a=s.actions.slice();if(v&&v.missed>=6)a.unshift(['Fix pickups',`${v.missed} missed collections or overflowing containers here in the last 12 months (city average ${SV.avg_missed_per_block_12mo}). On blocks like this, witnessed dumping rises after pickups are missed. Collect within 48 hours and check whether the block needs more containers.`]);return a};
 const noEnf=i=>D.enf&&D.enf.sites[i]&&(D.enf.sites[i].summons+D.enf.sites[i].arrest===0);
 function list(){
  sel=null;setPick(false);draw();
  if(tab==='act'){$('pane').innerHTML=`<p class="lede">The 40 blocks most likely to be dumped on next, ranked by the model. Arrows compare the last 12 months with the 12 before.</p>`+
-  D.sites.map((s,i)=>`<button class="row" data-i="${i}"><span class="rk">${s.rank}</span><span class="rt"><b>${s.nb} · ${clean(s.addrs[0]?s.addrs[0][0]:'')}</b><span>Ward ${s.ward} · ${s.n_recent} reports since 2022 · ${s.actions.map(a=>a[0]).join(', ')}${noEnf(i)?' · no citations since 2022':''}</span></span>${trend(s)}</button>`).join('');
+  D.sites.map((s,i)=>`<button class="row" data-i="${i}"><span class="rk">${s.rank}</span><span class="rt"><b>${s.nb} · ${clean(s.addrs[0]?s.addrs[0][0]:'')}</b><span>Ward ${s.ward} · ${s.n_recent} reports since 2022 · ${acts(i).map(a=>a[0]).join(', ')}${noEnf(i)?' · no citations since 2022':''}</span></span>${trend(s)}</button>`).join('');
   $('pane').querySelectorAll('.row').forEach(r=>r.onclick=()=>openSite(+r.dataset.i))}
  else if(tab==='watch'){$('pane').innerHTML=`<p class="lede">Blocks with no dumping reports for three years, but surrounded by the conditions that came before dumping elsewhere: city-owned (LRA) land and vacant buildings. Act before they become hotspots.</p>`+
   D.watch.map((w,i)=>`<button class="row" data-i="${i}"><span class="rk" style="color:var(--watch)">◆</span><span class="rt"><b>${w.nb}</b><span>${w.lra} LRA parcels · ${w.vac_bldg} vacant buildings · ${w.vac_lot} vacant lots nearby</span></span><span class="pill W">${w.p}%</span></button>`).join('');
@@ -310,7 +314,8 @@ function openSite(i){
   <button class="back" id="back">← All sites</button>
   <div><span class="pill ${s.tier[0]}">${s.tier} · #${s.rank}</span><h2>${s.nb}</h2><div class="meta">Ward ${s.ward} · ~200 m block around ${clean(s.addrs[0]?s.addrs[0][0]:'')} · last report ${new Date(s.last+'T12:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</div></div>
   <div class="facts"><div><b>${s.n_recent}</b><span>reports since 2022</span></div><div><b>${s.last12}</b><span>last 12 months (prior: ${s.prev12})</span></div><div><b>${s.med_close??'–'}</b><span>median days to close</span></div></div>
-  <div><h3>Recommended action</h3><div class="act">${s.actions.map(a=>`<div><b>${a[0]}</b><p>${a[1]}</p></div>`).join('')}</div></div>
+  <div><h3>Recommended action</h3><div class="act">${acts(i).map(a=>`<div><b>${a[0]}</b><p>${a[1]}</p></div>`).join('')}</div></div>
+  ${SV?`<div><h3>City service gaps here, last 12 months</h3><table><tr><td>Missed collections (trash, bulk, yard waste, overflow)</td><td class="n">${SV.sites[i].missed}</td></tr><tr><td>…of which containers overflowing</td><td class="n">${SV.sites[i].overflow}</td></tr><tr><td>Streetlight outages reported</td><td class="n">${SV.sites[i].lights}</td></tr></table><p class="note" style="margin-top:6px">City average: ${SV.avg_missed_per_block_12mo} missed collections a year on blocks with any.</p></div>`:''}
   ${e?`<div><h3>Enforcement since 2022</h3><table><tr><td>Witnessed reports investigated</td><td class="n">${e.witnessed}</td></tr><tr><td>Summons issued</td><td class="n">${e.summons}</td></tr><tr><td>Arrests</td><td class="n">${e.arrest}</td></tr><tr><td>Warnings</td><td class="n">${e.warning}</td></tr><tr><td>Closed: not enough evidence</td><td class="n">${e.nofail}</td></tr></table>${e.summons+e.arrest===0?`<p class="note" style="margin-top:6px"><b>No summons or arrest at this block since 2022.</b> ${e.witnessed?'Witnesses reported dumping, but no case resulted.':'No one has reported seeing it happen; a camera is the way in.'}</p>`:''}</div>`:''}
   <div><h3>Reports per year</h3>${bars(yrs,yrs.map((_,k)=>"'"+String(18+k)),css('--t2'))}</div>
   <div><h3>Repeat addresses (since 2022)</h3><table>${s.addrs.map(a=>`<tr><td>${clean(a[0])}</td><td class="n">${a[1]}</td></tr>`).join('')}</table></div>
@@ -421,9 +426,12 @@ function openForm(siteIdx){
  const showMode=()=>{const m=wmode();$('w-addr').hidden=m!=='addr';$('w-site').hidden=m!=='site';$('w-map').hidden=m!=='map';setPick(m==='map');
   pickLoc=m==='addr'?addrLoc:m==='map'?null:null;if(m==='map')$('locText').textContent='Click the map where it happened.';if(m==='site')updSite();draw()};
  const updSite=()=>{const v=$('f-site').value;if(v!==''){const s=D.sites[+v];focus(s.lon,s.lat,Math.max(view.k,4))}};
- const look=()=>{const v=$('f-addr').value.trim(),r=geocode(v),t=$('addrText');addrLoc=r;
+ const look=()=>{const v=$('f-addr').value.trim(),g=geocode(v),r=g&&!g.miss?g:null,t=$('addrText');addrLoc=r;
   if(r){t.innerHTML=`<span class="ok">✓ Found:</span> ${esc(r.label)}${r.exact?'':' (nearest block on that street)'}`;pickLoc=r;focus(r.lon,r.lat,Math.max(view.k,6))}
-  else{pickLoc=null;t.textContent=v.length<5?'House number and street, City of St. Louis.':'No match yet. Check the house number and street name; only addresses inside the City of St. Louis can be found.';draw()}};
+  else{pickLoc=null;const miss=g&&g.miss;t.textContent=v.length<5?'House number and street, City of St. Louis.':
+   miss==='format'?'Start with the house number, e.g. 5909 Lillian Ave.':
+   miss==='street'?'That street is not in the City of St. Louis. Addresses in St. Louis County (for example Lemay, Mehlville or Affton) are handled by the County, not the City. If the spot is inside the City, try Pick on map.':
+   'That street is in the City, but not near that house number. Check the number, or use Pick on map.';draw()}};
  document.querySelectorAll('input[name="wmode"]').forEach(x=>x.onchange=showMode);
  $('f-addr').oninput=()=>{clearTimeout(tm);tm=setTimeout(look,250)};$('f-site').onchange=updSite;showMode();
  $('f-photo').onchange=e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{photo=rd.result;$('f-thumb').src=photo;$('f-thumb').hidden=false};rd.readAsDataURL(f)};
@@ -459,6 +467,9 @@ function how(){
    <tr><td><b>Closed: not enough evidence</b></td><td class="n"><b>${fmt(o['Closed: not enough evidence']||0)}</b></td></tr><tr><td>No violation found</td><td class="n">${fmt(o['No violation found']||0)}</td></tr></table>
    <p class="note" style="margin-top:6px">${Math.round(E.enforced_share_of_decided)}% ended in a summons or arrest; ${Math.round(E.evidence_fail_share_of_decided)}% were closed for lack of evidence, including ${E.evidence_fail_breakdown['Incorrect information provided']||0} where the caller's information was wrong. The Cases tab exists to close that gap.</p></div>
   <p><b>The enforcement gap.</b> ${E.high_risk_no_enforcement} of ${E.high_risk_cells} Critical and High blocks have had no summons or arrest since 2022. In ${E.gap_witnessed_but_no_case} of them someone witnessed dumping but no case resulted; in ${E.gap_never_witnessed}, no one has ever reported seeing it happen. Turn on <i>No enforcement</i> on the map to see them.</p>`:''}
+  ${SV?`<div><h3>City service gaps come before dumping</h3><p style="margin-bottom:8px">On each block, we compared reports of someone <i>seen</i> dumping in the 60 days before and after a service complaint. Witnessed reports cannot be the uncollected trash itself, so they show new dumping. Control complaints from the same callers show no change.</p><table>
+   ${SV.witnessed_check.filter(w=>['Cntnr overflow/bulky','Refuse not collected','Bulky items missed','Cntnr blocking','Move container','Single Light Out','Whole Blk Lights Out'].includes(w.code)).map(w=>{const nm={'Cntnr overflow/bulky':'Container overflowing','Refuse not collected':'Trash not collected','Bulky items missed':'Bulk pickup missed','Cntnr blocking':'Container blocking (control)','Move container':'Move container (control)','Single Light Out':'Single streetlight out','Whole Blk Lights Out':'Whole block of lights out'}[w.code];const sig=w.ci_low_pct>0;return `<tr><td>${sig?'<b>':''}${nm}${sig?'</b>':''}</td><td class="n">${sig?'<b>':''}${w.change_pct>0?'+':''}${Math.round(w.change_pct)}%${sig?'</b>':''}</td><td class="n note">${Math.round(w.ci_low_pct)} to ${Math.round(w.ci_high_pct)}%</td></tr>`}).join('')}</table>
+   <p class="note" style="margin-top:6px">Bold = clear effect (95% range above zero). Missed and overflowing collections are followed by more people seen dumping; streetlight outages show no reliable effect. The fix the City fully controls: collect missed pickups on high-risk blocks within 48 hours. Sites where this applies carry a <i>Fix pickups</i> action.</p></div>`:''}
   ${S?`<p><b>Does fast cleanup stop repeat dumping?</b> We tested it and the 311 data does not show it. After matching blocks by report type and activity, a new report followed within ${S.window_days} days of ${S.adjusted.fast}% of fast cleanups (0–3 days) and ${S.adjusted.slow}% of slow ones (over 14 days). A clean block likely makes new dumping easier to see and report. Answering this needs a controlled pilot, not more 311 data.</p>`:''}
   <p><b>What goes into the score.</b> Each block's dumping history over 1–5 years, its neighbors' history, the mix of report types, and nearby city-owned land, vacant lots and registered vacant buildings.</p>
   <div><h3>Limits</h3><p class="note" style="font-size:13px">311 reports measure where dumping gets reported, not every dump. About 28% are logged by City staff, so patrolled areas are over-represented. Timestamps record the report, not the dump. The City appears to have changed how it codes vacant-lot and vacant-building debris after 2017. Police reports filed outside 311 are not in this data. Case linking is a prototype run on sample reports.</p></div>

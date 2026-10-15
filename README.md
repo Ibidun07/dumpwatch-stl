@@ -29,6 +29,8 @@ Open `outputs/dumpwatch.html` in any browser. It is a single self-contained file
 
 **Enforcement gap:** 110 of 199 Critical and High blocks have had no summons or arrest since 2022. In 80 of them someone witnessed dumping but no case resulted; in 30, no one ever reported seeing it.
 
+**City service gaps come before dumping:** on each block, we compared *witnessed* dumping reports (someone saw a person dump, so they cannot be the uncollected trash itself) in the 60 days before and after a service complaint. Witnessed dumping rose **21% after container-overflow reports** (95% range +8% to +35%), **14% after missed trash pickups** (+3% to +27%) and **12% after missed bulk pickups** (0% to +25%). Control complaints from the same callers (container blocking, move requests) showed no change. Streetlight outages showed no reliable effect. 11 of the top 40 sites have at least twice the city's average rate of missed collections and carry a *Fix pickups* action.
+
 **Fast cleanup (tested, not supported):** matching blocks by report type and prior activity, a new report followed within 60 days after 49.7% of fast cleanups (0–3 days) and 43.0% of slow ones (over 14 days). Cleaner blocks probably make new dumping easier to see and report, so 311 data cannot answer this; it needs a controlled pilot.
 
 **Note:** a history-only version of the model (step 6a) scores about the same on the top 5% (24%). Adding land data mainly helps with blocks that have no dumping history, which is what the watch list is for.
@@ -76,7 +78,8 @@ Then open `outputs/dumpwatch.html`.
 | 10 | `10_enforcement.py` | Groups the outcomes of witnessed reports (`PUBLICRESOLUTION`: summons, arrest, warning, not enough evidence), counts them per site and per year, and finds high-risk blocks with no summons or arrest. Writes `enforcement.json`. |
 | 11 | `11_cleanup_speed.py` | Tests whether fast closure of debris reports is followed by fewer repeat reports within 60 days, matching blocks by report type and prior-year activity. Writes `cleanup_speed.json`. |
 | 12 | `12_address_index.py` | Builds an offline address lookup from the 135,000 parcel addresses: the average location of each street hundred-block (10,395 blocks on 2,032 streets, 287 KB). The report form uses it to place a typed address such as "5909 Lillian Ave" without any outside geocoding service. Writes `address_index.json`. |
-| 9 | `09_build_pages.py` | Merges steps 10–12 into the app data and injects it into the HTML templates in `web/` to produce the two self-contained pages. Runs last. |
+| 13 | `13_service_gaps.py` | Event study: dumping on the same block in the 60 days before vs after streetlight-outage and missed-collection reports, with placebo complaint types as controls, a witnessed-dumping check, an outage-length test, and each top site's service history. Writes `service_gaps.json`. |
+| 9 | `09_build_pages.py` | Merges steps 10–13 into the app data and injects it into the HTML templates in `web/` to produce the two self-contained pages. Runs last. |
 
 `explore_problem_codes.py` is the exploration script used to find which 311 problem codes relate to dumping.
 

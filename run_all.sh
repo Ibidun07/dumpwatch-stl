@@ -18,5 +18,6 @@ echo "8/9 Site profiles + map layers";       python pipeline/08_site_profiles.py
 echo "10 Enforcement outcomes and gaps";       python pipeline/10_enforcement.py $OUT
 echo "11 Cleanup speed test";                  python pipeline/11_cleanup_speed.py $OUT
 echo "12 Address lookup index";                python pipeline/12_address_index.py $OUT
+echo "13 City service gaps vs dumping";       python pipeline/13_service_gaps.py $RAW $OUT
 echo "9/9 Build HTML pages";                 python pipeline/09_build_pages.py web $OUT
 echo "Done. Open outputs/dumpwatch.html in a browser."

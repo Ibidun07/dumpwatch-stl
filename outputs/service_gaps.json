@@ -1,0 +1,354 @@
+{
+ "window_days": 60,
+ "event_study": [
+  {
+   "group": "Streetlight out",
+   "events": 37196,
+   "dump_before": 15243,
+   "dump_after": 15707,
+   "change_pct": 3.0,
+   "ci_low_pct": -0.1,
+   "ci_high_pct": 6.0,
+   "blocks_with_any_dumping_after_pct": 23.8
+  },
+  {
+   "group": "Lights on in daytime (placebo)",
+   "events": 1229,
+   "dump_before": 497,
+   "dump_after": 482,
+   "change_pct": -3.0,
+   "ci_low_pct": -16.7,
+   "ci_high_pct": 11.3,
+   "blocks_with_any_dumping_after_pct": 22.8
+  },
+  {
+   "group": "Missed collection",
+   "events": 40409,
+   "dump_before": 18495,
+   "dump_after": 20822,
+   "change_pct": 12.6,
+   "ci_low_pct": 10.0,
+   "ci_high_pct": 15.7,
+   "blocks_with_any_dumping_after_pct": 29.0
+  },
+  {
+   "group": "Container blocking/move (placebo)",
+   "events": 16165,
+   "dump_before": 8889,
+   "dump_after": 8984,
+   "change_pct": 1.1,
+   "ci_low_pct": -2.2,
+   "ci_high_pct": 4.6,
+   "blocks_with_any_dumping_after_pct": 31.4
+  }
+ ],
+ "outage_dose": {
+  "total": {
+   "outages": 11712,
+   "dump_during": 1280,
+   "dump_after_fix": 1201,
+   "during_vs_after_pct": 6.6,
+   "median_outage_days": 6.0
+  },
+  "by_length": [
+   {
+    "outage_length": "3-14 days",
+    "outages": 8696,
+    "dump_during": 402,
+    "dump_after_fix": 397,
+    "during_vs_after_pct": 1.3
+   },
+   {
+    "outage_length": "15-45 days",
+    "outages": 1949,
+    "dump_during": 344,
+    "dump_after_fix": 331,
+    "during_vs_after_pct": 3.9
+   },
+   {
+    "outage_length": "46-120 days",
+    "outages": 1067,
+    "dump_during": 534,
+    "dump_after_fix": 473,
+    "during_vs_after_pct": 12.9
+   }
+  ]
+ },
+ "witnessed_check": [
+  {
+   "code": "Cntnr overflow/bulky",
+   "events": 9941,
+   "witnessed_before": 583,
+   "witnessed_after": 705,
+   "change_pct": 20.9,
+   "ci_low_pct": 8.4,
+   "ci_high_pct": 34.9
+  },
+  {
+   "code": "Refuse not collected",
+   "events": 16468,
+   "witnessed_before": 659,
+   "witnessed_after": 752,
+   "change_pct": 14.1,
+   "ci_low_pct": 2.8,
+   "ci_high_pct": 26.7
+  },
+  {
+   "code": "Bulky items missed",
+   "events": 10827,
+   "witnessed_before": 600,
+   "witnessed_after": 671,
+   "change_pct": 11.8,
+   "ci_low_pct": 0.2,
+   "ci_high_pct": 24.9
+  },
+  {
+   "code": "Cntnr blocking",
+   "events": 9071,
+   "witnessed_before": 550,
+   "witnessed_after": 561,
+   "change_pct": 2.0,
+   "ci_low_pct": -9.3,
+   "ci_high_pct": 14.7
+  },
+  {
+   "code": "Move container",
+   "events": 7094,
+   "witnessed_before": 488,
+   "witnessed_after": 476,
+   "change_pct": -2.5,
+   "ci_low_pct": -14.0,
+   "ci_high_pct": 10.7
+  },
+  {
+   "code": "Single Light Out",
+   "events": 20810,
+   "witnessed_before": 698,
+   "witnessed_after": 756,
+   "change_pct": 8.3,
+   "ci_low_pct": -2.3,
+   "ci_high_pct": 20.0
+  },
+  {
+   "code": "Whole Blk Lights Out",
+   "events": 15141,
+   "witnessed_before": 666,
+   "witnessed_after": 623,
+   "change_pct": -6.5,
+   "ci_low_pct": -16.1,
+   "ci_high_pct": 4.3
+  },
+  {
+   "code": "Lights ON Daytime",
+   "events": 1229,
+   "witnessed_before": 49,
+   "witnessed_after": 42,
+   "change_pct": -14.3,
+   "ci_low_pct": -43.2,
+   "ci_high_pct": 29.4
+  }
+ ],
+ "sites": [
+  {
+   "missed": 4,
+   "overflow": 0,
+   "lights": 3
+  },
+  {
+   "missed": 10,
+   "overflow": 0,
+   "lights": 3
+  },
+  {
+   "missed": 1,
+   "overflow": 0,
+   "lights": 5
+  },
+  {
+   "missed": 1,
+   "overflow": 0,
+   "lights": 0
+  },
+  {
+   "missed": 2,
+   "overflow": 0,
+   "lights": 4
+  },
+  {
+   "missed": 1,
+   "overflow": 0,
+   "lights": 0
+  },
+  {
+   "missed": 1,
+   "overflow": 0,
+   "lights": 0
+  },
+  {
+   "missed": 1,
+   "overflow": 0,
+   "lights": 0
+  },
+  {
+   "missed": 10,
+   "overflow": 0,
+   "lights": 0
+  },
+  {
+   "missed": 8,
+   "overflow": 0,
+   "lights": 0
+  },
+  {
+   "missed": 6,
+   "overflow": 0,
+   "lights": 1
+  },
+  {
+   "missed": 7,
+   "overflow": 0,
+   "lights": 0
+  },
+  {
+   "missed": 1,
+   "overflow": 0,
+   "lights": 1
+  },
+  {
+   "missed": 17,
+   "overflow": 0,
+   "lights": 1
+  },
+  {
+   "missed": 1,
+   "overflow": 0,
+   "lights": 3
+  },
+  {
+   "missed": 1,
+   "overflow": 0,
+   "lights": 1
+  },
+  {
+   "missed": 2,
+   "overflow": 0,
+   "lights": 0
+  },
+  {
+   "missed": 2,
+   "overflow": 0,
+   "lights": 0
+  },
+  {
+   "missed": 4,
+   "overflow": 0,
+   "lights": 1
+  },
+  {
+   "missed": 8,
+   "overflow": 0,
+   "lights": 1
+  },
+  {
+   "missed": 2,
+   "overflow": 0,
+   "lights": 0
+  },
+  {
+   "missed": 7,
+   "overflow": 0,
+   "lights": 1
+  },
+  {
+   "missed": 3,
+   "overflow": 0,
+   "lights": 0
+  },
+  {
+   "missed": 4,
+   "overflow": 0,
+   "lights": 2
+  },
+  {
+   "missed": 3,
+   "overflow": 0,
+   "lights": 1
+  },
+  {
+   "missed": 2,
+   "overflow": 0,
+   "lights": 0
+  },
+  {
+   "missed": 6,
+   "overflow": 0,
+   "lights": 0
+  },
+  {
+   "missed": 2,
+   "overflow": 0,
+   "lights": 1
+  },
+  {
+   "missed": 4,
+   "overflow": 0,
+   "lights": 2
+  },
+  {
+   "missed": 4,
+   "overflow": 0,
+   "lights": 2
+  },
+  {
+   "missed": 3,
+   "overflow": 0,
+   "lights": 0
+  },
+  {
+   "missed": 4,
+   "overflow": 0,
+   "lights": 0
+  },
+  {
+   "missed": 7,
+   "overflow": 0,
+   "lights": 1
+  },
+  {
+   "missed": 4,
+   "overflow": 0,
+   "lights": 0
+  },
+  {
+   "missed": 15,
+   "overflow": 0,
+   "lights": 2
+  },
+  {
+   "missed": 1,
+   "overflow": 0,
+   "lights": 0
+  },
+  {
+   "missed": 0,
+   "overflow": 0,
+   "lights": 0
+  },
+  {
+   "missed": 2,
+   "overflow": 0,
+   "lights": 1
+  },
+  {
+   "missed": 2,
+   "overflow": 0,
+   "lights": 2
+  },
+  {
+   "missed": 1,
+   "overflow": 0,
+   "lights": 4
+  }
+ ],
+ "avg_missed_per_block_12mo": 3.2
+}
